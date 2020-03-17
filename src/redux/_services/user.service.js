@@ -15,7 +15,7 @@ function login(username, password) {
     body: JSON.stringify({ username, password })
   };
 
-  return fetch(`${API_BASE}/users/login`, requestOptions)
+  return fetch(`http://${API_BASE}/user/login`, requestOptions)
     .then(handleResponse)
     .then(user => {
       localStorage.setItem("user", JSON.stringify(user.user));
@@ -37,7 +37,9 @@ function register(user) {
     body: JSON.stringify(user)
   };
 
-  return fetch(`${API_BASE}/users/signup`, requestOptions).then(handleResponse);
+  return fetch(`http://${API_BASE}/user/signup`, requestOptions).then(
+    handleResponse
+  );
 }
 
 function handleResponse(response) {

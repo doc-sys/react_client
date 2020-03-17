@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { userActions } from "../redux/_actions/user.actions";
 
@@ -60,6 +61,7 @@ class Login extends Component {
             onChange={this.handleChange}
           />
           <Button type="submit" primary label="Submit" />
+          <Button as={Link} to="/signup" type="text" label="Sign Up" />
         </Form>
       </Box>
     );

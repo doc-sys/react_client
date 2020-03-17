@@ -10,6 +10,7 @@ import { alertActions } from "./redux/_actions/alert.actions";
 import Home from "./pages/Home";
 import Upload from "./pages/Upload";
 import { Login } from "./pages/Login";
+import SignUp from "./pages/Signup";
 import Settings from "./pages/Settings";
 import SingleView from "./pages/SingleView";
 import ErrorPage from "./pages/Error";
@@ -25,7 +26,7 @@ class Index extends Component {
     super(props);
 
     history.listen((location, action) => {
-      this.props.dispatch(alertActions.clear());
+      this.props.clearAlerts();
     });
   }
 
@@ -63,6 +64,7 @@ class Index extends Component {
                 <PrivateRoute exact path="/" component={Home} />
                 <PrivateRoute exact path="/upload" component={Upload} />
                 <Route exact path="/login" component={Login} />
+                <Route exact path="/signup" component={SignUp} />
                 <PrivateRoute exact path="/settings" component={Settings} />
                 <PrivateRoute path="/view/:fileid" component={SingleView} />
                 <Route path="*" component={ErrorPage} />
