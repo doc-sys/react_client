@@ -46,9 +46,6 @@ class Index extends Component {
             ]}
             fill={true}
           >
-            {alert && (
-              <div className={`alert ${alert.type}`}>{alert.message}</div>
-            )}
             <Box gridArea="header" background="brand"></Box>
             <Box gridArea="nav" background="light-5">
               <Navigation />
