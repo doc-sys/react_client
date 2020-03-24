@@ -8,7 +8,7 @@ export const documentService = {
   share
 };
 
-const API_BASE = "localhost:3000";
+const API_BASE = "localhost:3001";
 
 function getOwn() {
   const requestOptions = {
@@ -16,7 +16,7 @@ function getOwn() {
     headers: authHeader({ "Content-Type": "application/json" })
   };
 
-  return fetch(`${API_BASE}/documents/own`, requestOptions).then(
+  return fetch(`http://${API_BASE}/documents/own`, requestOptions).then(
     handleResponse
   );
 }
@@ -27,7 +27,7 @@ function getShared() {
     headers: authHeader({ "Content-Type": "application/json" })
   };
 
-  return fetch(`${API_BASE}/documents/shared`, requestOptions).then(
+  return fetch(`http://${API_BASE}/documents/shared`, requestOptions).then(
     handleResponse
   );
 }
