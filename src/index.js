@@ -7,12 +7,12 @@ import { store } from "./redux/_helpers/store";
 import { history } from "./redux/_helpers/history";
 import { alertActions } from "./redux/_actions/alert.actions";
 
-import Home from "./pages/Home";
+import { Home } from "./pages/Home";
 import Upload from "./pages/Upload";
 import { Login } from "./pages/Login";
 import SignUp from "./pages/Signup";
 import Settings from "./pages/Settings";
-import SingleView from "./pages/SingleView";
+import { SingleView } from "./pages/SingleView";
 import ErrorPage from "./pages/Error";
 
 import Navigation from "./components/Navigation";
