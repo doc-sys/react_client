@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers/authHeader";
+import { history } from "../_helpers/history";
 
 export const userService = {
   login,
@@ -21,6 +21,8 @@ function login(username, password) {
       localStorage.setItem("user", JSON.stringify(user.user));
       localStorage.setItem("token", user.token);
 
+      history.push("/");
+
       return user.user;
     });
 }
@@ -28,6 +30,8 @@ function login(username, password) {
 function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
+
+  history.push("/login");
 }
 
 function register(user) {
