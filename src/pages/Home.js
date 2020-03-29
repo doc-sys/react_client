@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import { connect } from "react-redux";
 
@@ -23,35 +23,42 @@ class Home extends Component {
 
   render() {
     const { docs } = this.props;
+
     return (
       <Box basis="full" pad="medium">
         <Heading>Documents</Heading>
-        <Tabs>
+        <Tabs alignSelf="start" justify="start">
           <Tab title="Own Documents" as={Button}>
-            <DataTable
-              columns={[
-                {
-                  property: "title",
-                  header: <Text>Title</Text>
-                },
-                {
-                  property: "fileId",
-                  header: <Text>FileID</Text>,
-                  primary: true,
-                  render: data => (
-                    <Link to={"/view/" + data.fileId}>{data.fileId}</Link>
-                  )
-                },
-                {
-                  property: "isLocked",
-                  header: null,
-                  render: data => (
-                    <Box>{data.isLocked ? <DocumentLocked /> : null}</Box>
-                  )
+            <Box>
+              <DataTable
+                basis="full"
+                fill={true}
+                size="large"
+                columns={[
+                  {
+                    property: "title",
+                    header: <Text>Title</Text>
+                  },
+                  {
+                    property: "fileId",
+                    header: <Text>FileID</Text>,
+                    primary: true,
+                    render: data => <Text>{data.fileId}</Text>
+                  },
+                  {
+                    property: "isLocked",
+                    header: null,
+                    render: data => (
+                      <Box>{data.isLocked ? <DocumentLocked /> : null}</Box>
+                    )
+                  }
+                ]}
+                data={docs.ownDocuments}
+                onClickRow={e =>
+                  this.props.history.push("/view/" + e.datum.fileId)
                 }
-              ]}
-              data={docs.ownDocuments}
-            />
+              />
+            </Box>
           </Tab>
           <Tab title="Shared Documents" as={Button}>
             <DataTable
@@ -74,6 +81,9 @@ class Home extends Component {
                 }
               ]}
               data={docs.sharedDocuments}
+              onClickRow={e =>
+                this.props.history.push("/view/" + e.datum.fileId)
+              }
             />
           </Tab>
         </Tabs>
@@ -88,4 +98,6 @@ function mapState(state) {
 }
 
 const connectedHomePage = connect(mapState)(Home);
-export { connectedHomePage as Home };
+const routedHomepage = withRouter(connectedHomePage);
+
+export { routedHomepage as Home };
