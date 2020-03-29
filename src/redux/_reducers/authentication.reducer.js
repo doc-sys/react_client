@@ -24,13 +24,12 @@ export function authentication(state = initState, action) {
 
     // REFLECT SETTINGS CHANGE IN AVATAR
     case settingsConstants.AVATAR_SUCCESS:
-      console.log(action.avatar);
       return {
         ...state,
         user: {
           ...user,
           avatar: action.avatar
-        ,}
+        }
       };
     default:
       return state;
