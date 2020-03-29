@@ -6,6 +6,7 @@ export const documentActions = {
   getOwn,
   getShared,
   getSingle,
+  clearSingle,
   delete: _delete,
   share
 };
@@ -88,6 +89,16 @@ function getSingle(fileid) {
   }
   function failure(error) {
     return { type: documentConstants.GET_SINGLE_FAILURE, error };
+  }
+}
+
+function clearSingle() {
+  return dispatch => {
+    dispatch(success());
+  };
+
+  function success(doc) {
+    return { type: documentConstants.GET_SINGLE_SUCCESS, document: null };
   }
 }
 

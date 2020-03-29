@@ -88,12 +88,21 @@ function singleDocument(state = {}, action) {
     case documentConstants.GET_SINGLE_SUCCESS:
       return {
         ...state,
+        loadingDocument: false,
         document: action.document
       };
     case documentConstants.GET_SINGLE_FAILURE:
       return {
         ...state,
         error: action.error
+      };
+
+    //CLEAR DOC
+    case documentConstants.CLEAR_SINGLE_SUCCESS:
+      return {
+        ...state,
+        loadingDocument: false,
+        document: null
       };
 
     //SHARE SINGLE DOCUMENT
@@ -106,12 +115,14 @@ function singleDocument(state = {}, action) {
     case documentConstants.SHARE_SUCCESS:
       return {
         ...state,
+        sharing: false,
         shared: true
       };
 
     case documentConstants.SHARE_FAILURE:
       return {
         ...state,
+        sharing: false,
         error: action.error
       };
 

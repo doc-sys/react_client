@@ -38,7 +38,7 @@ function getSingle(fileid) {
     headers: authHeader({ "Content-Type": "application/json" })
   };
 
-  return fetch(`${API_BASE}/documents/${fileid}`, requestOptions).then(
+  return fetch(`http://${API_BASE}/documents/${fileid}`, requestOptions).then(
     handleResponse
   );
 }
@@ -49,7 +49,7 @@ function _delete(fileid) {
     headers: authHeader({ "Content-Type": "application/json" })
   };
 
-  return fetch(`${API_BASE}/documents/${fileid}`, requestOptions).then(
+  return fetch(`http://${API_BASE}/documents/${fileid}`, requestOptions).then(
     handleResponse
   );
 }
@@ -61,7 +61,7 @@ function share(fileid, whom) {
     body: JSON.stringify({ who: whom })
   };
 
-  return fetch(`${API_BASE}/documents/share`, requestOptions).then(
+  return fetch(`http://${API_BASE}/documents/share`, requestOptions).then(
     handleResponse
   );
 }
