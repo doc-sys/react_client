@@ -106,7 +106,7 @@ function _delete(fileid) {
   return dispatch => {
     dispatch(request(fileid));
 
-    documentService._delete(fileid).then(
+    documentService.delete(fileid).then(
       docs => {
         dispatch(success(fileid));
       },
