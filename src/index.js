@@ -11,7 +11,7 @@ import { Home } from "./pages/Home";
 import Upload from "./pages/Upload";
 import { Login } from "./pages/Login";
 import SignUp from "./pages/Signup";
-import Settings from "./pages/Settings";
+import { Settings } from "./pages/Settings";
 import { SingleView } from "./pages/SingleView";
 import ErrorPage from "./pages/Error";
 
@@ -75,8 +75,8 @@ class Index extends Component {
 }
 
 function mapState(state) {
-  const { alert } = state;
-  return { alert };
+  const { alert, authentication } = state;
+  return { alert, authentication };
 }
 
 const actionCreator = {
