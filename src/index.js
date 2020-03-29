@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import "./style.css";
+import theme from "./theme.json";
+
+import jwt from "jsonwebtoken";
+
 import { Provider, connect } from "react-redux";
 import { store } from "./redux/_helpers/store";
 import { history } from "./redux/_helpers/history";
@@ -14,6 +19,7 @@ import SignUp from "./pages/Signup";
 import { Settings } from "./pages/Settings";
 import { SingleView } from "./pages/SingleView";
 import ErrorPage from "./pages/Error";
+import Users from "./pages/Users";
 
 import { Alert } from "./components/Alert";
 import { Sidebar } from "./components/Sidebar";
