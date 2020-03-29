@@ -15,11 +15,41 @@ import { Settings } from "./pages/Settings";
 import { SingleView } from "./pages/SingleView";
 import ErrorPage from "./pages/Error";
 
-import Navigation from "./components/Navigation";
+import { Alert } from "./components/Alert";
+import { Sidebar } from "./components/Sidebar";
 import { PrivateRoute } from "./components/PrivateRoute";
 
-import { Box, Grid, Grommet } from "grommet";
-import { Notification } from "grommet-icons";
+import { Box, Grid, Grommet, Nav } from "grommet";
+import {
+  Grommet as GIcon,
+  Group,
+  SettingsOption,
+  DocumentUpload,
+  Catalog
+} from "grommet-icons";
+
+const items = [
+  {
+    label: "Documents",
+    Icon: Catalog,
+    path: "/"
+  },
+  {
+    label: "Upload",
+    Icon: DocumentUpload,
+    path: "/upload"
+  },
+  {
+    label: "Users",
+    Icon: Group,
+    path: "/users"
+  },
+  {
+    label: "Settings",
+    Icon: SettingsOption,
+    path: "/settings"
+  }
+];
 
 class Index extends Component {
   constructor(props) {
@@ -30,44 +60,64 @@ class Index extends Component {
     });
   }
 
+  componentWillUpdate() {
+    let token = localStorage.getItem("token");
+    let decodedToken = jwt.decode(token, { complete: true });
+    let time = new Date();
+
+    if (decodedToken && decodedToken.payload.exp * 1000 < time.getTime()) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      this.setState({});
+    }
+  }
+
+  closeDialog() {
+    this.props.clearAlerts();
+  }
+
   render() {
     const { alert } = this.props;
-    return (
-      <Router history={history}>
-        <Grommet plain>
-          <Grid
-            rows={["xsmall", "auto"]}
-            columns={["small", "auto"]}
-            gap="small"
-            areas={[
-              { name: "header", start: [0, 0], end: [1, 0] },
-              { name: "nav", start: [0, 1], end: [0, 1] },
-              { name: "main", start: [1, 1], end: [1, 1] }
-            ]}
-            fill={true}
-          >
-            <Box gridArea="header" background="brand"></Box>
-            <Box gridArea="nav" background="light-5">
-              <Navigation />
-            </Box>
-            <Box gridArea="main" background="light-2" height="large">
-              {alert.message && (
-                <Box>
-                  <p>{alert.message}</p>
-                </Box>
-              )}
+    const {
+      authentication: { user }
+    } = this.props;
+    let userSession = {
+      user: user,
+      items: [
+        { label: "Logout", path: "/logout" },
+        { label: "My Plan", path: "/plans" }
+      ]
+    };
 
+    return (
+      <Router>
+        <Grommet theme={theme} full>
+          <Box direction="row" fill>
+            <Sidebar
+              appIcon={<GIcon color="brand" />}
+              appName="docsys"
+              items={items}
+              userSession={user ? userSession : null}
+            />
+            <Box flex>
+              {alert.message && (
+                <Alert
+                  message={alert.message}
+                  onClose={() => this.closeDialog()}
+                />
+              )}
               <Switch>
-                <PrivateRoute exact path="/" component={Home} />
-                <PrivateRoute exact path="/upload" component={Upload} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={SignUp} />
+                <PrivateRoute exact path="/" component={Home} />
+                <PrivateRoute exact path="/upload" component={Upload} />
                 <PrivateRoute exact path="/settings" component={Settings} />
+                <PrivateRoute exact path="/users" component={Users} />
                 <PrivateRoute path="/view/:fileid" component={SingleView} />
-                <Route path="*" component={ErrorPage} />
+                <Route component={ErrorPage} />
               </Switch>
             </Box>
-          </Grid>
+          </Box>
         </Grommet>
       </Router>
     );

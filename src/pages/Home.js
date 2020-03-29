@@ -24,7 +24,7 @@ class Home extends Component {
   render() {
     const { docs } = this.props;
     return (
-      <Box>
+      <Box basis="full" pad="medium">
         <Heading>Documents</Heading>
         <Tabs>
           <Tab title="Own Documents" as={Button}>
