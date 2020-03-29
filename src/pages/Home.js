@@ -62,6 +62,7 @@ class Home extends Component {
           </Tab>
           <Tab title="Shared Documents" as={Button}>
             <DataTable
+              size="large"
               columns={[
                 {
                   property: "title",
