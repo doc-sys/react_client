@@ -11,7 +11,7 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      avatar: null,
+      file: null,
       submitted: false
     };
 
@@ -24,30 +24,30 @@ class Settings extends Component {
 
     this.setState({ submitted: true });
 
-    const { avatar } = this.state;
     const { dispatch } = this.props;
 
-    if (avatar) {
-      dispatch(settingsActions.upload(avatar));
+    if (this.state.file) {
+      dispatch(settingsActions.upload(this.state.file));
     }
   }
 
   handleChange(e) {
-    console.log(e.target);
-    const { name, files } = e.target;
-    this.setState({ [name]: files[0] });
+    this.setState({ file: e.target.files[0] });
   }
 
   render() {
-    const { avatar, submitted } = this.state;
+    const {
+      authentication: { user }
+    } = this.props;
     return (
       <Box pad="medium">
         <Heading>Settings</Heading>
         <Form onSubmit={this.handleSubmit}>
+          <Avatar url={user.avatar} />
           <FormField
-            name="username"
+            name="avatar"
             label="Avatar"
-            value={avatar}
+            value={this.avatar}
             onChange={this.handleChange}
           >
             <input type="file" name="avatar" />
@@ -60,8 +60,8 @@ class Settings extends Component {
 }
 
 function mapState(state) {
-  const { user } = state.authentication;
-  return { user };
+  const { authentication } = state;
+  return { authentication };
 }
 
 const connectedSettings = connect(mapState)(Settings);
