@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { documentActions } from "../redux/_actions/document.actions";
-
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +9,6 @@ export default class SignUp extends Component {
   }
 
   render() {
-    return <p>Home</p>;
+    return <p>SIGNUP</p>;
   }
 }
