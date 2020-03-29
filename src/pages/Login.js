@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import { userActions } from "../redux/_actions/user.actions";
 
@@ -14,8 +14,7 @@ class Login extends Component {
 
     this.state = {
       username: "",
-      password: "",
-      submitted: false
+      password: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -30,8 +29,6 @@ class Login extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    this.setState({ submitted: true });
-
     const { username, password } = this.state;
     const { dispatch } = this.props;
     if (username && password) {
@@ -39,9 +36,15 @@ class Login extends Component {
     }
   }
 
+  componentWillReceiveProps() {
+    const { loggedIn } = this.props;
+    if (loggedIn) {
+      this.props.history.push("/");
+    }
+  }
+
   render() {
-    const { loggingIn } = this.props;
-    const { username, password, submitted } = this.state;
+    const { username, password } = this.state;
 
     return (
       <Box pad="medium">
@@ -69,8 +72,8 @@ class Login extends Component {
 }
 
 function mapState(state) {
-  const { loggingIn } = state.authentication;
-  return { loggingIn };
+  const { loggedIn } = state.authentication;
+  return { loggedIn };
 }
 
 /* const actionCreator = {
@@ -79,5 +82,6 @@ function mapState(state) {
 }; */
 
 const connectedLoginPage = connect(mapState)(Login);
+const routedLogin = withRouter(connectedLoginPage);
 
-export { connectedLoginPage as Login };
+export { routedLogin as Login };
