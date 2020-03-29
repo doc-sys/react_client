@@ -13,7 +13,14 @@ export const UserMenu = ({ user = {}, items = [], ...rest }) => (
       label: <Text size="small">{item.label}</Text>,
       onClick: () => {} // no-op
     }))}
-    label={<Avatar name={user.settings.displayName} url={user.avatar} />}
+    label={
+      <Avatar
+        /* name={user.settings ? user.settings.displayName : null} */
+        url={user.avatar}
+        width={"32px"}
+        height={"32px"}
+      />
+    }
     {...rest}
   />
 );
