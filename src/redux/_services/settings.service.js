@@ -6,15 +6,13 @@ export const settingsService = {
 
 const API_BASE = "localhost:3001";
 
-function uploadAvatar(fileList) {
+function uploadAvatar(file) {
   let data = new FormData();
-  data.append("file", fileList[0]);
+  data.append("file", file);
 
   const requestOptions = {
     method: "POST",
-    headers: authHeader({
-      "Content-Type": "application/x-www-form-urlencoded"
-    }),
+    headers: authHeader(),
     body: data
   };
 
