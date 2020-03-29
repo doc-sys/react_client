@@ -19,7 +19,7 @@ export class Sidebar extends Component {
     return (
       <Box
         fill="vertical"
-        width="sidebar"
+        width="xsmall"
         background="dark-2"
         elevation="medium"
         {...rest}
@@ -45,7 +45,7 @@ export class Sidebar extends Component {
             <Text size="xsmall">{appName}</Text>
           </Box>
         </RoutedButton>
-        <Box flex overflow="auto">
+        <Box flex /*overflow="auto"*/>
           {items.map(({ active, Icon, label, path }) => (
             <MenuButton
               active={active}
@@ -53,6 +53,7 @@ export class Sidebar extends Component {
               path={path}
               label={label}
               key={label}
+              pad="xsmall"
             />
           ))}
         </Box>
