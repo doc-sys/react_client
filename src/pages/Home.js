@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { Box, Button, DataTable, Text, Heading, Tabs, Tab } from "grommet";
+import Moment from "react-moment";
 import { DocumentLocked } from "grommet-icons";
 
 import { documentActions } from "../redux/_actions/document.actions";
@@ -12,7 +13,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: ""
+      title: "",
     };
   }
 
@@ -33,28 +34,35 @@ class Home extends Component {
               <DataTable
                 basis="full"
                 fill={true}
-                size="large"
+                size="medium"
                 columns={[
                   {
                     property: "title",
-                    header: <Text>Title</Text>
+                    header: <Text>Title</Text>,
                   },
                   {
                     property: "fileId",
                     header: <Text>FileID</Text>,
                     primary: true,
-                    render: data => <Text>{data.fileId}</Text>
+                    render: (data) => <Text>{data.fileId}</Text>,
+                  },
+                  {
+                    property: "dated",
+                    header: <Text>Uploaded</Text>,
+                    render: (data) => (
+                      <Moment format="DD.MM.YYYY">{data.dated}</Moment>
+                    ),
                   },
                   {
                     property: "isLocked",
                     header: null,
-                    render: data => (
-                      <Box>{data.isLocked ? <DocumentLocked /> : null}</Box>
-                    )
-                  }
+                    render: (data) => (
+                      <Box>{data.locked ? <DocumentLocked /> : null}</Box>
+                    ),
+                  },
                 ]}
                 data={docs.ownDocuments}
-                onClickRow={e =>
+                onClickRow={(e) =>
                   this.props.history.push("/view/" + e.datum.fileId)
                 }
               />
@@ -66,23 +74,30 @@ class Home extends Component {
               columns={[
                 {
                   property: "title",
-                  header: <Text>Title</Text>
+                  header: <Text>Title</Text>,
                 },
                 {
                   property: "fileId",
                   header: <Text>FileID</Text>,
-                  primary: true
+                  primary: true,
+                },
+                {
+                  property: "dated",
+                  header: <Text>Uploaded</Text>,
+                  render: (data) => (
+                    <Moment format="DD.MM.YYYY">{data.dated}</Moment>
+                  ),
                 },
                 {
                   property: "isLocked",
                   header: null,
-                  render: data => (
+                  render: (data) => (
                     <Box>{data.isLocked ? <DocumentLocked /> : null}</Box>
-                  )
-                }
+                  ),
+                },
               ]}
               data={docs.sharedDocuments}
-              onClickRow={e =>
+              onClickRow={(e) =>
                 this.props.history.push("/view/" + e.datum.fileId)
               }
             />

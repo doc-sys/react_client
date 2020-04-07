@@ -8,7 +8,8 @@ export const documentActions = {
   getSingle,
   clearSingle,
   delete: _delete,
-  share
+  share,
+  checkout
 };
 
 function getOwn() {
@@ -151,5 +152,31 @@ function share(fileid, whom) {
   }
   function failure(error) {
     return { type: documentConstants.SHARE_FAILURE, error };
+  }
+}
+
+function checkout(fileId) {
+  return dispatch => {
+    dispatch(request());
+
+    documentService.checkout(fileId).then(
+      _ => {
+        dispatch(success());
+      },
+      error => {
+        dispatch(failure(error.toString()));
+        dispatch(alertActions.error(error.toString()));
+      }
+    );
+  };
+
+  function request() {
+    return { type: documentConstants.CHECKOUT_REQUEST };
+  }
+  function success() {
+    return { type: documentConstants.CHECKOUT_SUCCESS, fileId };
+  }
+  function failure(error) {
+    return { type: documentConstants.CHECKOUT_FAILURE, error };
   }
 }

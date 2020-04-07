@@ -5,7 +5,8 @@ export const documentService = {
   getShared,
   getSingle,
   delete: _delete,
-  share
+  share,
+  checkout
 };
 
 const API_BASE = "localhost:3001";
@@ -64,6 +65,35 @@ function share(fileid, whom) {
   return fetch(`http://${API_BASE}/documents/share`, requestOptions).then(
     handleResponse
   );
+}
+
+function checkout(fileId) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader()
+  };
+
+  return fetch(
+    `http://${API_BASE}/documents/checkout/${fileId}`,
+    requestOptions
+  ).then(handleDownloadResponse);
+}
+
+function handleDownloadResponse(response) {
+  return response.blob().then(blob => {
+    if (!response.ok) {
+      const error = response.statusText || "Something went wrong";
+      return Promise.reject(error);
+    }
+
+    let link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+  });
 }
 
 function handleResponse(response) {
