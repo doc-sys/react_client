@@ -10,3 +10,13 @@ npm start
 ```
 
 It requires a docSys instance running at port 3001. See (here)[https://github.com/doc-sys/docsys#Getting-Started] for more.
+
+## Contribute
+
+### Things to do
+
+- Add upload functionality
+- Redefine design
+- Write proper configuration (mainly for API host)
+- Clean up redux state
+- Write tests and documentation
