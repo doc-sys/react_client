@@ -9,7 +9,7 @@ export const documentService = {
   checkout
 };
 
-const API_BASE = "localhost:3001";
+const API_BASE = process.env.API_BASE
 
 function getOwn() {
   const requestOptions = {
@@ -17,7 +17,7 @@ function getOwn() {
     headers: authHeader({ "Content-Type": "application/json" })
   };
 
-  return fetch(`http://${API_BASE}/documents/own`, requestOptions).then(
+  return fetch(`https://${API_BASE}/document/own`, requestOptions).then(
     handleResponse
   );
 }
@@ -28,7 +28,7 @@ function getShared() {
     headers: authHeader({ "Content-Type": "application/json" })
   };
 
-  return fetch(`http://${API_BASE}/documents/shared`, requestOptions).then(
+  return fetch(`https://${API_BASE}/document/shared`, requestOptions).then(
     handleResponse
   );
 }
@@ -39,7 +39,7 @@ function getSingle(fileid) {
     headers: authHeader({ "Content-Type": "application/json" })
   };
 
-  return fetch(`http://${API_BASE}/documents/${fileid}`, requestOptions).then(
+  return fetch(`https://${API_BASE}/document/${fileid}`, requestOptions).then(
     handleResponse
   );
 }
@@ -50,7 +50,7 @@ function _delete(fileid) {
     headers: authHeader({ "Content-Type": "application/json" })
   };
 
-  return fetch(`http://${API_BASE}/documents/${fileid}`, requestOptions).then(
+  return fetch(`https://${API_BASE}/document/${fileid}`, requestOptions).then(
     handleResponse
   );
 }
@@ -62,7 +62,7 @@ function share(fileid, whom) {
     body: JSON.stringify({ who: whom })
   };
 
-  return fetch(`http://${API_BASE}/documents/share`, requestOptions).then(
+  return fetch(`https://${API_BASE}/document/share`, requestOptions).then(
     handleResponse
   );
 }
@@ -74,7 +74,7 @@ function checkout(fileId) {
   };
 
   return fetch(
-    `http://${API_BASE}/documents/checkout/${fileId}`,
+    `https://${API_BASE}/document/checkout/${fileId}`,
     requestOptions
   ).then(handleDownloadResponse);
 }

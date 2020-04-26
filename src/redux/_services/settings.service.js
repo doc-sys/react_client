@@ -4,7 +4,7 @@ export const settingsService = {
   uploadAvatar
 };
 
-const API_BASE = "localhost:3001";
+const API_BASE = process.env.API_BASE
 
 function uploadAvatar(file) {
   let data = new FormData();
@@ -16,7 +16,7 @@ function uploadAvatar(file) {
     body: data
   };
 
-  return fetch(`http://${API_BASE}/settings/avatar`, requestOptions)
+  return fetch(`https://${API_BASE}/settings/avatar`, requestOptions)
     .then(handleResponse)
     .then(user => {
       localStorage.setItem("user", JSON.stringify(user.user));

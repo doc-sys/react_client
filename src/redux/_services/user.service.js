@@ -6,7 +6,7 @@ export const userService = {
   register
 };
 
-const API_BASE = "localhost:3001";
+const API_BASE = process.env.API_BASE
 
 function login(username, password) {
   const requestOptions = {
@@ -15,7 +15,7 @@ function login(username, password) {
     body: JSON.stringify({ username, password })
   };
 
-  return fetch(`http://${API_BASE}/user/login`, requestOptions)
+  return fetch(`https://${API_BASE}/user/login`, requestOptions)
     .then(handleResponse)
     .then(user => {
       localStorage.setItem("user", JSON.stringify(user.user));
@@ -41,7 +41,7 @@ function register(user) {
     body: JSON.stringify(user)
   };
 
-  return fetch(`http://${API_BASE}/user/signup`, requestOptions).then(
+  return fetch(`https://${API_BASE}/user/signup`, requestOptions).then(
     handleResponse
   );
 }
