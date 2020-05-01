@@ -20,7 +20,8 @@ export function authentication(state = initState, action) {
     case userConstants.LOGIN_FAILURE:
       return {};
     case userConstants.LOGOUT:
-      return {};
+      delete state.user;
+      return state;
 
     // REFLECT SETTINGS CHANGE IN AVATAR
     case settingsConstants.AVATAR_SUCCESS:

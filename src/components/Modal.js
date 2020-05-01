@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Layer, Box, Text } from "grommet";
-import { MailOption } from "grommet-icons";
+import { Layer } from "grommet";
 /* 
 const DropContent = ({ onClose }) => (
   <Box pad="small">
@@ -25,7 +24,6 @@ export default class Modal extends Component {
   };
 
   render() {
-    const { open } = this.state;
     const { exit, children } = this.props;
     return (
       <Layer

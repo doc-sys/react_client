@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
 import { connect } from "react-redux";
-import { authHeader } from "../redux/_helpers/authHeader";
+import { authHeader } from "../../redux/_helpers/authHeader";
 
 import {
   Box,
@@ -20,11 +20,11 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import Moment from "react-moment";
 import Autosuggest from "react-autosuggest";
 
-import ClickToEdit from "../components/ClickToEdit";
-import SingleViewActions from "../components/SingleViewActions";
-import Modal from "../components/Modal";
+import ClickToEdit from "./ClickToEdit";
+import SingleViewActions from "./SingleViewActions";
+import Modal from "../../components/Modal";
 
-import { documentActions } from "../redux/_actions/document.actions";
+import { documentActions } from "../../redux/_actions/document.actions";
 
 export default class SingleView extends Component {
   constructor(props) {

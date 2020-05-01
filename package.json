@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fluentui/react": "^7.108.0",
+    "@uifabric/icons": "^7.3.32",
+    "axios": "^0.19.2",
     "grommet": "^2.11.1",
     "grommet-icons": "^4.4.0",
     "jsonwebtoken": "^8.5.1",

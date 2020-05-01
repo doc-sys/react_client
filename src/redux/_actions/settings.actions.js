@@ -1,37 +1,37 @@
-import { settingsConstants } from "../_constants/settings.constants";
+import { settingsConstants } from '../_constants/settings.constants'
 
-import { alertActions } from "./alert.actions";
+import { alertActions } from './alert.actions'
 
-import { settingsService } from "../_services/settings.service";
+import { settingsService } from '../_services/settings.service'
 
 export const settingsActions = {
-  upload
-};
+	upload,
+}
 
-function upload(fileList) {
-  return dispatch => {
-    dispatch(request());
+function upload(fileList, username) {
+	return dispatch => {
+		dispatch(request())
 
-    settingsService.uploadAvatar(fileList).then(
-      avatar => {
-        dispatch(success(avatar));
-      },
-      error => {
-        dispatch(failure(error.toString()));
-        dispatch(alertActions.error(error.toString()));
-      }
-    );
-  };
+		settingsService.uploadAvatar(fileList, username).then(
+			avatar => {
+				dispatch(success(avatar))
+			},
+			error => {
+				dispatch(failure(error.toString()))
+				dispatch(alertActions.error(error.toString()))
+			}
+		)
+	}
 
-  function request() {
-    return { type: settingsConstants.AVATAR_REQUEST };
-  }
+	function request() {
+		return { type: settingsConstants.AVATAR_REQUEST }
+	}
 
-  function success(avatar) {
-    return { type: settingsConstants.AVATAR_SUCCESS, avatar };
-  }
+	function success(avatar) {
+		return { type: settingsConstants.AVATAR_SUCCESS, avatar }
+	}
 
-  function failure(error) {
-    return { type: settingsConstants.AVATAR_ERROR, error };
-  }
+	function failure(error) {
+		return { type: settingsConstants.AVATAR_ERROR, error }
+	}
 }

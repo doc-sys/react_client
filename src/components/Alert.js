@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layer, Box, Text, Button, Anchor } from "grommet";
+import { Layer, Box, Text, Button } from "grommet";
 import { FormClose } from "grommet-icons";
 
 class Toast extends Component {

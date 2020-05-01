@@ -1,149 +1,196 @@
-import React, { Component } from "react";
-import { render } from "react-dom";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { Component } from 'react'
+import { render } from 'react-dom'
+import { Router, Route, Switch } from 'react-router-dom'
 
-import "./style.css";
-import theme from "./theme.json";
+import jwt from 'jsonwebtoken'
 
-import jwt from "jsonwebtoken";
+import { Provider, connect } from 'react-redux'
+import { store } from './redux/_helpers/store'
+import { history } from './redux/_helpers/history'
+import { alertActions } from './redux/_actions/alert.actions'
 
-import { Provider, connect } from "react-redux";
-import { store } from "./redux/_helpers/store";
-import { history } from "./redux/_helpers/history";
-import { alertActions } from "./redux/_actions/alert.actions";
+import { Home } from './pages/Home/Home'
+import { Upload } from './pages/Upload/Upload'
+import { Login } from './pages/Login/Login'
+import SignUp from './pages/Signup'
+import { Settings } from './pages/Settings/Settings'
+import { SingleView } from './pages/SingleView/SingleView'
+import ErrorPage from './pages/Error'
+import Users from './pages/Users/Users'
 
-import { Home } from "./pages/Home";
-import Upload from "./pages/Upload";
-import { Login } from "./pages/Login";
-import SignUp from "./pages/Signup";
-import { Settings } from "./pages/Settings";
-import { SingleView } from "./pages/SingleView";
-import ErrorPage from "./pages/Error";
-import Users from "./pages/Users";
+import { Sidebar } from './components/Sidebar'
+import { PrivateRoute } from './components/PrivateRoute'
 
-import { Alert } from "./components/Alert";
-import { Sidebar } from "./components/Sidebar";
-import { PrivateRoute } from "./components/PrivateRoute";
+import { MessageBar, MessageBarType, Stack, StackItem } from '@fluentui/react'
+import { initializeIcons } from '@uifabric/icons'
 
-import { Box, Grid, Grommet, Nav } from "grommet";
-import {
-  Grommet as GIcon,
-  Group,
-  SettingsOption,
-  DocumentUpload,
-  Catalog
-} from "grommet-icons";
+initializeIcons()
+
+const ErrorMessage = p => (
+	<MessageBar
+		messageBarType={
+			p.type === 'alert-danger' ? MessageBarType.error : MessageBarType.success
+		}
+		isMultiline={false}
+		onDismiss={p.onClose}
+		dismissButtonAriaLabel="Close"
+		on
+	>
+		{p.message}
+	</MessageBar>
+)
 
 const items = [
-  {
-    label: "Documents",
-    Icon: Catalog,
-    path: "/"
-  },
-  {
-    label: "Upload",
-    Icon: DocumentUpload,
-    path: "/upload"
-  },
-  {
-    label: "Users",
-    Icon: Group,
-    path: "/users"
-  },
-  {
-    label: "Settings",
-    Icon: SettingsOption,
-    path: "/settings"
-  }
-];
+	{
+		links: [
+			{
+				name: 'Dashboard',
+				url: '/',
+				key: '/',
+				icon: 'Home',
+			},
+			{
+				name: 'Upload',
+				url: '/upload',
+				key: '/upload',
+				icon: 'BulkUpload',
+			},
+			{
+				name: 'ToDo',
+				url: '/todo',
+				key: '/todo',
+				icon: 'EventToDoLogo',
+				disabled: true,
+			},
+			{
+				name: 'Messages',
+				url: '/messages',
+				key: '/messages',
+				icon: 'Message',
+				disabled: true,
+			},
+			{
+				name: 'Users',
+				url: '/users',
+				key: '/users',
+				icon: 'UserOptional',
+			},
+			{
+				name: 'Settings',
+				url: '/settings',
+				key: '/settings',
+				icon: 'Settings',
+			},
+		],
+	},
+]
 
 class Index extends Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props)
 
-    history.listen((location, action) => {
-      this.props.clearAlerts();
-    });
-  }
+		history.listen((location, action) => {
+			this.props.clearAlerts()
+		})
 
-  componentWillUpdate() {
-    let token = localStorage.getItem("token");
-    let decodedToken = jwt.decode(token, { complete: true });
-    let time = new Date();
+		this.alertTimer = null
+	}
 
-    if (decodedToken && decodedToken.payload.exp * 1000 < time.getTime()) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      this.setState({});
-    }
-  }
+	componentDidUpdate() {
+		let token = localStorage.getItem('token')
+		let decodedToken = jwt.decode(token, { complete: true })
+		let time = new Date()
 
-  closeDialog() {
-    this.props.clearAlerts();
-  }
+		if (decodedToken && decodedToken.payload.exp * 1000 < time.getTime()) {
+			localStorage.removeItem('token')
+			localStorage.removeItem('user')
+			this.setState({})
+		}
+	}
 
-  render() {
-    const { alert } = this.props;
-    const {
-      authentication: { user }
-    } = this.props;
-    let userSession = {
-      user: user,
-      items: [
-        { label: "Logout", path: "/logout" },
-        { label: "My Plan", path: "/plans" }
-      ]
-    };
+	closeDialog() {
+		this.props.clearAlerts()
+		if (this.alertTimer != null) {
+			clearTimeout(this.alertTimer)
+		}
+	}
 
-    return (
-      <Router>
-        <Grommet theme={theme} full>
-          <Box direction="row" fill>
-            <Sidebar
-              appIcon={<GIcon color="brand" />}
-              appName="docsys"
-              items={items}
-              userSession={user ? userSession : null}
-            />
-            <Box flex>
-              {alert.message && (
-                <Alert
-                  message={alert.message}
-                  onClose={() => this.closeDialog()}
-                />
-              )}
-              <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={SignUp} />
-                <PrivateRoute exact path="/" component={Home} />
-                <PrivateRoute exact path="/upload" component={Upload} />
-                <PrivateRoute exact path="/settings" component={Settings} />
-                <PrivateRoute exact path="/users" component={Users} />
-                <PrivateRoute path="/view/:fileid" component={SingleView} />
-                <Route component={ErrorPage} />
-              </Switch>
-            </Box>
-          </Box>
-        </Grommet>
-      </Router>
-    );
-  }
+	render() {
+		const { alert } = this.props
+		const {
+			authentication: { user },
+		} = this.props
+		let userSession = {
+			user: user,
+			items: [
+				{ label: 'Logout', path: '/logout' },
+				{ label: 'My Plan', path: '/plans' },
+			],
+		}
+
+		return (
+			<Router history={history}>
+				<Stack horizontal styles={{ root: { height: '100vh' } }}>
+					<StackItem align="stretch" styles={{ root: { width: 200 } }}>
+						<Sidebar
+							appName="docsys"
+							history={history}
+							items={items}
+							userSession={user ? userSession : null}
+						/>
+					</StackItem>
+
+					<StackItem
+						align="stretch"
+						styles={{ root: { display: 'flex', width: '100%' } }}
+					>
+						<Stack styles={{ root: { width: '100%' } }}>
+							<StackItem>
+								{alert.message && (
+									<ErrorMessage
+										message={alert.message}
+										type={alert.type}
+										onClose={() => this.closeDialog()}
+										styles={{ root: { paddingLeft: 20 } }}
+									/>
+								)}
+							</StackItem>
+							<StackItem
+								styles={{ root: { paddingTop: 20, paddingLeft: 20, paddingRight: 20 } }}
+							>
+								<Switch>
+									<Route exact path="/login" component={Login} />
+									<Route exact path="/signup" component={SignUp} />
+									<PrivateRoute exact path="/" component={Home} />
+									<PrivateRoute exact path="/upload" component={Upload} />
+									<PrivateRoute exact path="/settings" component={Settings} />
+									<PrivateRoute exact path="/users" component={Users} />
+									<PrivateRoute path="/view/:fileid" component={SingleView} />
+									<Route component={ErrorPage} />
+								</Switch>
+							</StackItem>
+						</Stack>
+					</StackItem>
+				</Stack>
+			</Router>
+		)
+	}
 }
 
 function mapState(state) {
-  const { alert, authentication } = state;
-  return { alert, authentication };
+	const { alert, authentication } = state
+	return { alert, authentication }
 }
 
 const actionCreator = {
-  clearAlerts: alertActions.clear
-};
+	clearAlerts: alertActions.clear,
+}
 
-const ConnectedIndex = connect(mapState, actionCreator)(Index);
+const ConnectedIndex = connect(mapState, actionCreator)(Index)
 
 render(
-  <Provider store={store}>
-    <ConnectedIndex />
-  </Provider>,
-  document.getElementById("root")
-);
+	<Provider store={store}>
+		<ConnectedIndex />
+	</Provider>,
+	document.getElementById('root')
+)

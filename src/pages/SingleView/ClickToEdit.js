@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Heading } from "grommet";
-
 import "./CtE_styles.css";
 
 class ClickToEdit extends React.Component {
@@ -26,7 +24,7 @@ class ClickToEdit extends React.Component {
     }
   };
   handleEnterKey = e => {
-    if (e.keyCode === 13 || e.charCode == 13) {
+    if (e.keyCode === 13 || e.charCode === 13) {
       this.setState({
         onEditMode: false
       });
