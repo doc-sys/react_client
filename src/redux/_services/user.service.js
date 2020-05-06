@@ -10,7 +10,15 @@ export const userService = {
 	unlock,
 }
 
-const API_BASE = process.env.API_BASE || 'localhost:3001'
+var API_BASE
+
+if (process.env.NODE_ENV === 'development') {
+	API_BASE = 'localhost:3001'
+}
+
+if (process.env.NODE_ENV === 'production') {
+	API_BASE = 'core:3001'
+}
 
 function login(username, password) {
 	const requestOptions = {

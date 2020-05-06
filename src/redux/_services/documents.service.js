@@ -11,7 +11,15 @@ export const documentService = {
 	upload,
 }
 
-const API_BASE = process.env.API_BASE || '127.0.0.1:3001'
+var API_BASE
+
+if (process.env.NODE_ENV === 'development') {
+	API_BASE = 'localhost:3001'
+}
+
+if (process.env.NODE_ENV === 'production') {
+	API_BASE = 'core:3001'
+}
 
 function getOwn() {
 	const requestOptions = {
