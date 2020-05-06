@@ -17,7 +17,6 @@ import {
 } from '@fluentui/react'
 
 import { HomeToolbar } from './Toolbar'
-import { shareModal } from './shareModal'
 
 import { documentActions } from '../../redux/_actions/document.actions'
 
@@ -165,12 +164,15 @@ class Home extends Component {
 						<span className="ms-fontSize-42 ms-fontWeight-semibold">Documents</span>
 					</StackItem>
 					<StackItem>
-						<HomeToolbar itemsSelected={this.state.itemsSelected} />
+						<HomeToolbar
+							itemsSelected={this.state.itemsSelected}
+							selection={this.state.selection}
+						/>
 					</StackItem>
 					<StackItem>
 						<MarqueeSelection selection={this._itemSelection}>
 							<DetailsList
-								items={docs.ownDocuments.docs || []}
+								items={docs.ownDocuments || []}
 								columns={this.columns}
 								isHeaderVisible={true}
 								layoutMode={DetailsListLayoutMode.justified}
@@ -195,8 +197,6 @@ class Home extends Component {
 				itemsSelected: this._itemSelection.getSelectedCount() > 0 ? true : false,
 				selection: this._itemSelection.getSelection(),
 			})
-
-			console.log(this.state)
 		},
 	})
 }

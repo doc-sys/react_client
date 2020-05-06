@@ -12,14 +12,14 @@ export const userActions = {
 	getAll,
 }
 
-function login(username, password) {
+function login(username, password, pushPath) {
 	return dispatch => {
 		dispatch(request({ username }))
 
 		userService.login(username, password).then(
 			user => {
 				dispatch(success(user))
-				history.push('/')
+				history.push(pushPath)
 			},
 			error => {
 				dispatch(failure(error.toString()))

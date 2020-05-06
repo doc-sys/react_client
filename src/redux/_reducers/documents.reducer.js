@@ -17,7 +17,7 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 			return {
 				...state,
 				loadingOwn: false,
-				ownDocuments: action.ownDocuments,
+				ownDocuments: action.ownDocuments.docs,
 			}
 		case documentConstants.GET_OWN_FAILURE:
 			return {
@@ -54,9 +54,9 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 		case documentConstants.DELETE_OWN_SUCCESS:
 			return {
 				...state,
-				ownDocuments: state.ownDocuments.filter(
-					doc => doc.fileid !== action.fileid
-				),
+				ownDocuments: state.ownDocuments.filter(doc => {
+					return doc.fileId !== action.fileid
+				}),
 			}
 
 		case documentConstants.DELETE_OWN_FAILURE:
@@ -110,7 +110,10 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 	}
 }
 
-function singleDocument(state = {}, action) {
+function singleDocument(
+	state = { loadingDocument: false, document: null },
+	action
+) {
 	switch (action.type) {
 		//GET SINGLE DOCUMENT
 		case documentConstants.GET_SINGLE_REQUEST:
@@ -122,12 +125,13 @@ function singleDocument(state = {}, action) {
 			return {
 				...state,
 				loadingDocument: false,
-				document: action.document,
+				document: action.document.doc,
 			}
 		case documentConstants.GET_SINGLE_FAILURE:
 			return {
 				...state,
 				error: action.error,
+				loadingDocument: false,
 			}
 
 		//CLEAR DOC

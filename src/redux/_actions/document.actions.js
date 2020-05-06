@@ -101,6 +101,7 @@ function uploadDocument(formBody) {
 		documentService.upload(formBody).then(
 			doc => {
 				dispatch(success(doc))
+				dispatch(alertActions.success('Successfully uploaded document'))
 			},
 			error => {
 				dispatch(failure(error.toString()))
@@ -126,7 +127,7 @@ function clearSingle() {
 	}
 
 	function success(doc) {
-		return { type: documentConstants.GET_SINGLE_SUCCESS, document: null }
+		return { type: documentConstants.CLEAR_SINGLE_SUCCESS }
 	}
 }
 
@@ -152,7 +153,7 @@ function _delete(fileid) {
 		return { type: documentConstants.DELETE_OWN_SUCCESS, fileid: fileid }
 	}
 	function failure(error, fileid) {
-		return { type: documentConstants.GET_OWN_FAILURE, error, fileid: fileid }
+		return { type: documentConstants.DELETE_OWN_FAILURE, error }
 	}
 }
 

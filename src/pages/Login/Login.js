@@ -31,7 +31,13 @@ class Login extends Component {
 		const { username, password } = this.state
 		const { dispatch } = this.props
 		if (username && password) {
-			dispatch(userActions.login(username, password))
+			dispatch(
+				userActions.login(
+					username,
+					password,
+					this.props.location.state.from.pathname
+				)
+			)
 		} else {
 			dispatch(alertActions.error('Plese provide username and password'))
 		}

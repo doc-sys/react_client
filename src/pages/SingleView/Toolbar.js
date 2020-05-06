@@ -10,43 +10,31 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { history } from '../../redux/_helpers/history'
 import { documentActions } from '../../redux/_actions/document.actions'
 
-import { PeopleAutosuggest } from './Picker'
+import { history } from '../../redux/_helpers/history'
 
-const _farItems = [
-	{
-		key: 'info',
-		text: 'Info',
-		// This needs an ariaLabel since it's icon-only
-		ariaLabel: 'Info',
-		iconOnly: true,
-		iconProps: { iconName: 'Info' },
-		onClick: () => console.log('Info'),
-	},
-]
-
-export function HomeToolbar(props) {
+export function SVToolbar(props) {
 	const [showShareModal, toogleShareModal] = React.useState(false)
 	const [showDeleteModal, setDeleteModal] = React.useState(false)
-	const [selectedToShare, setSelectedToShare] = React.useState([])
 
-	const doc = useSelector(state => state.loadedDoc.document)
+	const loading = useSelector(state => state.loadedDoc.loadingDocument)
+	const file = useSelector(state => state.loadedDoc.document)
 	const dispatch = useDispatch()
 
 	const _items = [
 		{
-			key: 'upload',
-			text: 'New',
-			iconProps: { iconName: 'Upload' },
-			onClick: () => history.push('/upload'),
+			key: 'checkout',
+			text: 'Checkout',
+			iconProps: { iconName: 'Download' },
+			disabled: loading,
+			onClick: () => dispatch(documentActions.checkout(file.fileId)),
 		},
 		{
 			key: 'delete',
 			text: 'Delete',
 			iconProps: { iconName: 'Delete' },
-			disabled: !props.itemsSelected,
+			disabled: loading,
 			onClick: () => setDeleteModal(true),
 		},
 		{
@@ -56,7 +44,7 @@ export function HomeToolbar(props) {
 			onClick: () => {
 				toogleShareModal(!showShareModal)
 			},
-			disabled: !props.itemsSelected,
+			disabled: loading,
 		},
 	]
 
@@ -76,19 +64,9 @@ export function HomeToolbar(props) {
 					styles: { main: { maxWidth: 450 } },
 				}}
 			>
-				<PeopleAutosuggest onChangeHandler={setSelectedToShare} />
+				<p>TEXT</p>
 				<DialogFooter>
-					<PrimaryButton
-						onClick={() => {
-							props.selection.forEach(file => {
-								selectedToShare.forEach(user => {
-									dispatch(documentActions.share(file.fileId, user.username))
-								})
-							})
-						}}
-					>
-						Share
-					</PrimaryButton>
+					<PrimaryButton onClick={null}>Share</PrimaryButton>
 					<DefaultButton onClick={() => toogleShareModal(false)}>
 						Cancel
 					</DefaultButton>
@@ -102,7 +80,7 @@ export function HomeToolbar(props) {
 					type: DialogType.largeHeader,
 					title: 'Delete Documents',
 					subText:
-						'You are about to delete all selected documents for you and everybody you shared them with. Proceed with caution.',
+						'You are about to delete this document for you and everybody you shared it with. Proceed with caution.',
 				}}
 				modalProps={{
 					isBlocking: true,
@@ -110,24 +88,12 @@ export function HomeToolbar(props) {
 				}}
 			>
 				<DialogFooter>
-					<PrimaryButton
-						onClick={() => {
-							props.selection.forEach(el => {
-								dispatch(documentActions.delete(el.fileId))
-							})
-							setDeleteModal(false)
-						}}
-					>
-						Delete
-					</PrimaryButton>
+					<PrimaryButton onClick={null}>Delete</PrimaryButton>
 					<DefaultButton onClick={() => setDeleteModal(false)}>Cancel</DefaultButton>
 				</DialogFooter>
 			</Dialog>
-			<CommandBar
-				items={_items}
-				farItems={_farItems}
-				styles={{ root: { paddingLeft: 0 } }}
-			/>
+
+			<CommandBar items={_items} styles={{ root: { paddingLeft: 0 } }} />
 		</div>
 	)
 }

@@ -11,7 +11,7 @@ export const documentService = {
 	upload,
 }
 
-const API_BASE = process.env.API_BASE || 'localhost:3001'
+const API_BASE = process.env.API_BASE || '127.0.0.1:3001'
 
 function getOwn() {
 	const requestOptions = {
@@ -52,7 +52,7 @@ function _delete(fileid) {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`https://${API_BASE}/document/${fileid}`, requestOptions).then(
+	return fetch(`http://${API_BASE}/document/${fileid}`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -61,12 +61,13 @@ function share(fileid, whom) {
 	const requestOptions = {
 		method: 'POST',
 		headers: authHeader({ 'Content-Type': 'application/json' }),
-		body: JSON.stringify({ who: whom }),
+		body: JSON.stringify({ whoToShare: whom }),
 	}
 
-	return fetch(`https://${API_BASE}/document/share`, requestOptions).then(
-		handleResponse
-	)
+	return fetch(
+		`http://${API_BASE}/document/share/${fileid}`,
+		requestOptions
+	).then(handleResponse)
 }
 
 function checkout(fileId) {
@@ -76,7 +77,7 @@ function checkout(fileId) {
 	}
 
 	return fetch(
-		`https://${API_BASE}/document/checkout/${fileId}`,
+		`http://${API_BASE}/document/checkout/${fileId}`,
 		requestOptions
 	).then(handleDownloadResponse)
 }

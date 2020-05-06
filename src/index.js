@@ -17,6 +17,7 @@ import { Settings } from './pages/Settings/Settings'
 import { SingleView } from './pages/SingleView/SingleView'
 import ErrorPage from './pages/Error'
 import Users from './pages/Users/Users'
+import { Messages } from './pages/Messages/Messages'
 
 import { Sidebar } from './components/Sidebar'
 import { PrivateRoute } from './components/PrivateRoute'
@@ -40,51 +41,6 @@ const ErrorMessage = p => (
 	</MessageBar>
 )
 
-const items = [
-	{
-		links: [
-			{
-				name: 'Dashboard',
-				url: '/',
-				key: '/',
-				icon: 'Home',
-			},
-			{
-				name: 'Upload',
-				url: '/upload',
-				key: '/upload',
-				icon: 'BulkUpload',
-			},
-			{
-				name: 'ToDo',
-				url: '/todo',
-				key: '/todo',
-				icon: 'EventToDoLogo',
-				disabled: true,
-			},
-			{
-				name: 'Messages',
-				url: '/messages',
-				key: '/messages',
-				icon: 'Message',
-				disabled: true,
-			},
-			{
-				name: 'Users',
-				url: '/users',
-				key: '/users',
-				icon: 'UserOptional',
-			},
-			{
-				name: 'Settings',
-				url: '/settings',
-				key: '/settings',
-				icon: 'Settings',
-			},
-		],
-	},
-]
-
 class Index extends Component {
 	constructor(props) {
 		super(props)
@@ -92,8 +48,6 @@ class Index extends Component {
 		history.listen((location, action) => {
 			this.props.clearAlerts()
 		})
-
-		this.alertTimer = null
 	}
 
 	componentDidUpdate() {
@@ -135,7 +89,7 @@ class Index extends Component {
 						<Sidebar
 							appName="docsys"
 							history={history}
-							items={items}
+							router={this.context.router}
 							userSession={user ? userSession : null}
 						/>
 					</StackItem>
@@ -165,6 +119,8 @@ class Index extends Component {
 									<PrivateRoute exact path="/upload" component={Upload} />
 									<PrivateRoute exact path="/settings" component={Settings} />
 									<PrivateRoute exact path="/users" component={Users} />
+									<PrivateRoute exact path="/messages" component={Messages} />
+									<PrivateRoute path="/messages/:convoId" component={Messages} />
 									<PrivateRoute path="/view/:fileid" component={SingleView} />
 									<Route component={ErrorPage} />
 								</Switch>
