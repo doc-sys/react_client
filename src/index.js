@@ -84,50 +84,56 @@ class Index extends Component {
 
 		return (
 			<Router history={history}>
-				<Stack horizontal styles={{ root: { height: '100vh' } }}>
-					<StackItem align="stretch" styles={{ root: { width: 200 } }}>
-						<Sidebar
-							appName="docsys"
-							history={history}
-							router={this.context.router}
-							userSession={user ? userSession : null}
-						/>
-					</StackItem>
-
-					<StackItem
-						align="stretch"
-						styles={{ root: { display: 'flex', width: '100%' } }}
-					>
-						<Stack styles={{ root: { width: '100%' } }}>
-							<StackItem>
-								{alert.message && (
-									<ErrorMessage
-										message={alert.message}
-										type={alert.type}
-										onClose={() => this.closeDialog()}
-										styles={{ root: { paddingLeft: 20 } }}
-									/>
-								)}
+				<div style={{ width: '70%', margin: 'auto' }}>
+					<Stack styles={{ root: { width: '100%' } }}>
+						<StackItem>
+							{alert.message && (
+								<ErrorMessage
+									message={alert.message}
+									type={alert.type}
+									onClose={() => this.closeDialog()}
+									styles={{ root: { paddingLeft: 20 } }}
+								/>
+							)}
+						</StackItem>
+						<Stack horizontal styles={{ root: { height: '100vh', paddingTop: 20 } }}>
+							<StackItem align="stretch" styles={{ root: { width: 250 } }}>
+								<Sidebar
+									appName="docsys"
+									history={history}
+									router={this.context.router}
+									userSession={user ? userSession : null}
+								/>
 							</StackItem>
+
 							<StackItem
-								styles={{ root: { paddingTop: 20, paddingLeft: 20, paddingRight: 20 } }}
+								align="stretch"
+								styles={{ root: { display: 'flex', width: '100%' } }}
 							>
-								<Switch>
-									<Route exact path="/login" component={Login} />
-									<Route exact path="/signup" component={SignUp} />
-									<PrivateRoute exact path="/" component={Home} />
-									<PrivateRoute exact path="/upload" component={Upload} />
-									<PrivateRoute exact path="/settings" component={Settings} />
-									<PrivateRoute exact path="/users" component={Users} />
-									<PrivateRoute exact path="/messages" component={Messages} />
-									<PrivateRoute path="/messages/:convoId" component={Messages} />
-									<PrivateRoute path="/view/:fileid" component={SingleView} />
-									<Route component={ErrorPage} />
-								</Switch>
+								<Stack styles={{ root: { width: '100%' } }}>
+									<StackItem
+										styles={{
+											root: { paddingTop: 20, paddingLeft: 20, paddingRight: 20 },
+										}}
+									>
+										<Switch>
+											<Route exact path="/login" component={Login} />
+											<Route exact path="/signup" component={SignUp} />
+											<PrivateRoute exact path="/" component={Home} />
+											<PrivateRoute exact path="/upload" component={Upload} />
+											<PrivateRoute exact path="/settings" component={Settings} />
+											<PrivateRoute exact path="/users" component={Users} />
+											<PrivateRoute exact path="/messages" component={Messages} />
+											<PrivateRoute path="/messages/:convoId" component={Messages} />
+											<PrivateRoute path="/view/:fileid" component={SingleView} />
+											<Route component={ErrorPage} />
+										</Switch>
+									</StackItem>
+								</Stack>
 							</StackItem>
 						</Stack>
-					</StackItem>
-				</Stack>
+					</Stack>
+				</div>
 			</Router>
 		)
 	}

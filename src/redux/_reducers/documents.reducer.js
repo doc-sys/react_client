@@ -142,6 +142,15 @@ function singleDocument(
 				document: null,
 			}
 
+		case documentConstants.ADD_COMMENT_SUCCESS:
+			return {
+				...state,
+				document: {
+					...state.document,
+					log: action.log,
+				},
+			}
+
 		//CHECKOUT SINGLE
 		case documentConstants.CHECKOUT_SUCCESS:
 			return {

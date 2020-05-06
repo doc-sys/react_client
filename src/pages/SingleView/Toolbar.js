@@ -24,8 +24,8 @@ export function SVToolbar(props) {
 
 	const _items = [
 		{
-			key: 'checkout',
-			text: 'Checkout',
+			key: 'download',
+			text: 'Download',
 			iconProps: { iconName: 'Download' },
 			disabled: loading,
 			onClick: () => dispatch(documentActions.checkout(file.fileId)),

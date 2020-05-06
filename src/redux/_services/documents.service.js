@@ -9,6 +9,7 @@ export const documentService = {
 	share,
 	checkout,
 	upload,
+	addComment,
 }
 
 var API_BASE
@@ -74,6 +75,19 @@ function share(fileid, whom) {
 
 	return fetch(
 		`http://${API_BASE}/document/share/${fileid}`,
+		requestOptions
+	).then(handleResponse)
+}
+
+function addComment(fileid, comment) {
+	const requestOptions = {
+		method: 'POST',
+		headers: authHeader({ 'Content-Type': 'application/json' }),
+		body: JSON.stringify({ comment: comment }),
+	}
+
+	return fetch(
+		`http://${API_BASE}/document/comment/${fileid}`,
 		requestOptions
 	).then(handleResponse)
 }

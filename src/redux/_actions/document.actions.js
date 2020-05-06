@@ -11,6 +11,7 @@ export const documentActions = {
 	share,
 	checkout,
 	uploadDocument,
+	addComment,
 }
 
 function getOwn() {
@@ -206,5 +207,31 @@ function checkout(fileId) {
 	}
 	function failure(error) {
 		return { type: documentConstants.CHECKOUT_FAILURE, error }
+	}
+}
+
+function addComment(fileId, comment) {
+	return dispatch => {
+		dispatch(request())
+
+		documentService.addComment(fileId, comment).then(
+			log => {
+				dispatch(success(log))
+			},
+			error => {
+				dispatch(failure(error.toString()))
+				dispatch(alertActions.error(error.toString()))
+			}
+		)
+	}
+
+	function request() {
+		return { type: documentConstants.ADD_COMMENT_REQUEST }
+	}
+	function success(log) {
+		return { type: documentConstants.ADD_COMMENT_SUCCESS, log }
+	}
+	function failure(error) {
+		return { type: documentConstants.ADD_COMMENT_ERROR, error }
 	}
 }
