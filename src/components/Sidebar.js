@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Nav, Callout } from '@fluentui/react'
+import { Nav } from '@fluentui/react'
 
 export function Sidebar(props) {
 	const items = [
@@ -13,10 +13,18 @@ export function Sidebar(props) {
 					icon: 'Home',
 				},
 				{
-					name: 'Upload',
-					url: '/upload',
-					key: '/upload',
-					icon: 'BulkUpload',
+					name: 'Files',
+					url: '/files',
+					key: '/files',
+					isExpanded: true,
+					links: [
+						{
+							name: 'Upload',
+							url: '/upload',
+							key: '/upload',
+							icon: 'Upload',
+						},
+					],
 				},
 				{
 					name: 'ToDo',
@@ -49,9 +57,6 @@ export function Sidebar(props) {
 
 	const { router } = props
 
-	const [showCalloutTodo, setCalloutTodo] = React.useState(false)
-	const [showCalloutMessages, setCalloutMessages] = React.useState(false)
-
 	return (
 		<div>
 			<Nav
@@ -63,16 +68,6 @@ export function Sidebar(props) {
 					props.history.push(el.url)
 				}}
 			/>
-
-			{showCalloutMessages && (
-				<Callout
-					role="alertdialog"
-					target="compositeLink-69"
-					onDismiss={() => setCalloutMessages(false)}
-				>
-					<p>HEYO</p>
-				</Callout>
-			)}
 		</div>
 	)
 }

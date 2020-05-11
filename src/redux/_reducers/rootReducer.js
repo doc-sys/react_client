@@ -9,8 +9,8 @@ import { message } from './message.reducer'
 
 const rootReducer = combineReducers({
 	authentication: authentication,
-	docs: documentReducers.documents,
-	loadedDoc: documentReducers.singleDocument,
+	files: documentReducers.documents,
+	currentFile: documentReducers.singleDocument,
 	registration,
 	users,
 	alert,

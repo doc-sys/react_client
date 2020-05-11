@@ -10,6 +10,9 @@ export const documentService = {
 	checkout,
 	upload,
 	addComment,
+	archive,
+	queueKey,
+	queueOCR,
 }
 
 var API_BASE
@@ -111,6 +114,42 @@ function upload(formData) {
 		headers: authHeader({ 'Content-Type': 'multipart/form-data' }),
 		data: formData,
 	}).then(handleAxiosResponse)
+}
+
+function archive(fileId) {
+	const requestOptions = {
+		method: 'POST',
+		headers: authHeader(),
+	}
+
+	return fetch(
+		`http://${API_BASE}/document/archive/${fileId}`,
+		requestOptions
+	).then(handleResponse)
+}
+
+function queueOCR(fileId) {
+	const requestOptions = {
+		method: 'POST',
+		headers: authHeader(),
+	}
+
+	return fetch(
+		`http://${API_BASE}/document/queue/ocr/${fileId}`,
+		requestOptions
+	).then(handleResponse)
+}
+
+function queueKey(fileId) {
+	const requestOptions = {
+		method: 'POST',
+		headers: authHeader(),
+	}
+
+	return fetch(
+		`http://${API_BASE}/document/queue/key/${fileId}`,
+		requestOptions
+	).then(handleResponse)
 }
 
 function handleDownloadResponse(response) {

@@ -17,9 +17,10 @@ import { history } from '../../redux/_helpers/history'
 export function SVToolbar(props) {
 	const [showShareModal, toogleShareModal] = React.useState(false)
 	const [showDeleteModal, setDeleteModal] = React.useState(false)
+	const [showArchiveModal, setArchiveModal] = React.useState(false)
 
-	const loading = useSelector(state => state.loadedDoc.loadingDocument)
-	const file = useSelector(state => state.loadedDoc.document)
+	const loading = useSelector(state => state.currentFile.loadingDocument)
+	const file = useSelector(state => state.currentFile.document)
 	const dispatch = useDispatch()
 
 	const _items = [
@@ -46,6 +47,38 @@ export function SVToolbar(props) {
 			},
 			disabled: loading,
 		},
+		{
+			key: 'archive',
+			text: 'Archive',
+			iconProps: { iconName: 'Archive' },
+			onClick: () => {
+				setArchiveModal(!showArchiveModal)
+			},
+			disabled: loading,
+		},
+		{
+			key: 'queue',
+			text: 'Add Queue',
+			iconProps: { iconName: 'BuildQueueNew' },
+			subMenuProps: {
+				items: [
+					{
+						key: 'ocr',
+						text: 'OCR',
+						iconProps: { iconName: 'TextRecognition' },
+						onClick: () => dispatch(documentActions.queueOCR(file.fileId)),
+						disabled: file.ocr,
+					},
+					{
+						key: 'keywords',
+						text: 'Keyword Extraction',
+						iconProps: { iconName: 'KeyPhraseExtraction' },
+						onClick: () => dispatch(documentActions.queueKey(file.fileId)),
+						disabled: file.key,
+					},
+				],
+			},
+		},
 	]
 
 	return (
@@ -55,9 +88,9 @@ export function SVToolbar(props) {
 				onDismiss={() => toogleShareModal(false)}
 				dialogContentProps={{
 					type: DialogType.largeHeader,
-					title: 'Share Documents',
+					title: 'Share file',
 					subText:
-						'Please select the users you wish to share with. Users can modify documents as if they were their own.',
+						'Please select the users you wish to share with. Users can modify file as if they were their own.',
 				}}
 				modalProps={{
 					isBlocking: true,
@@ -78,9 +111,9 @@ export function SVToolbar(props) {
 				onDismiss={() => setDeleteModal(false)}
 				dialogContentProps={{
 					type: DialogType.largeHeader,
-					title: 'Delete Documents',
+					title: 'Delete File',
 					subText:
-						'You are about to delete this document for you and everybody you shared it with. Proceed with caution.',
+						'You are about to delete this file for you and everybody you shared it with. Proceed with caution.',
 				}}
 				modalProps={{
 					isBlocking: true,
@@ -88,8 +121,45 @@ export function SVToolbar(props) {
 				}}
 			>
 				<DialogFooter>
-					<PrimaryButton onClick={null}>Delete</PrimaryButton>
+					<PrimaryButton
+						onClick={() => {
+							dispatch(documentActions.delete(file.fileId))
+							setDeleteModal(false)
+							history.push('/')
+						}}
+					>
+						Delete
+					</PrimaryButton>
 					<DefaultButton onClick={() => setDeleteModal(false)}>Cancel</DefaultButton>
+				</DialogFooter>
+			</Dialog>
+
+			<Dialog
+				hidden={!showArchiveModal}
+				onDismiss={() => setArchiveModal(false)}
+				dialogContentProps={{
+					type: DialogType.largeHeader,
+					title: 'Archive file',
+					subText:
+						'You are about to move this file into the archive. It will not be easlily retrived. Proceed with caution.',
+				}}
+				modalProps={{
+					isBlocking: true,
+					styles: { main: { maxWidth: 450 } },
+				}}
+			>
+				<DialogFooter>
+					<PrimaryButton
+						onClick={() => {
+							dispatch(documentActions.archive(file.fileId))
+							setArchiveModal(false)
+						}}
+					>
+						Archive
+					</PrimaryButton>
+					<DefaultButton onClick={() => setArchiveModal(false)}>
+						Cancel
+					</DefaultButton>
 				</DialogFooter>
 			</Dialog>
 

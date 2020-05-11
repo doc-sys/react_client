@@ -32,7 +32,6 @@ export function HomeToolbar(props) {
 	const [showDeleteModal, setDeleteModal] = React.useState(false)
 	const [selectedToShare, setSelectedToShare] = React.useState([])
 
-	const doc = useSelector(state => state.loadedDoc.document)
 	const dispatch = useDispatch()
 
 	const _items = [
@@ -41,6 +40,7 @@ export function HomeToolbar(props) {
 			text: 'New',
 			iconProps: { iconName: 'Upload' },
 			onClick: () => history.push('/upload'),
+			disabled: props.itemsSelected,
 		},
 		{
 			key: 'delete',
@@ -82,7 +82,7 @@ export function HomeToolbar(props) {
 						onClick={() => {
 							props.selection.forEach(file => {
 								selectedToShare.forEach(user => {
-									dispatch(documentActions.share(file.fileId, user.username))
+									dispatch(documentActions.share(file.fileId, user._id))
 								})
 							})
 						}}

@@ -1,27 +1,35 @@
 import { documentConstants } from '../_constants/documents.constants'
 
+import { uniqBy, orderBy } from 'lodash'
+
 export const documentReducers = {
 	documents,
 	singleDocument,
 }
 
-function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
+function documents(state = { files: [] }, action) {
+	var unsortedFiles
 	switch (action.type) {
 		// GET OWN DOCUMENTS
 		case documentConstants.GET_OWN_REQUEST:
 			return {
 				...state,
-				loadingOwn: true,
+				loading: true,
 			}
 		case documentConstants.GET_OWN_SUCCESS:
+			unsortedFiles = uniqBy(
+				[...action.ownDocuments.docs, ...state.files],
+				'fileId'
+			)
 			return {
 				...state,
-				loadingOwn: false,
-				ownDocuments: action.ownDocuments.docs,
+				loading: false,
+				files: orderBy(unsortedFiles, file => new Date(file.dated), ['desc']),
 			}
 		case documentConstants.GET_OWN_FAILURE:
 			return {
 				...state,
+				loading: false,
 				error: action.error,
 			}
 
@@ -29,17 +37,22 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 		case documentConstants.GET_SHARED_REQUEST:
 			return {
 				...state,
-				loadingShared: true,
+				loading: true,
 			}
 		case documentConstants.GET_SHARED_SUCCESS:
+			unsortedFiles = uniqBy(
+				[...action.sharedDocuments.docs, ...state.files],
+				'fileId'
+			)
 			return {
 				...state,
-				loadingShared: false,
-				sharedDocuments: action.sharedDocuments,
+				loading: false,
+				files: orderBy(unsortedFiles, file => new Date(file.dated), 'desc'),
 			}
 		case documentConstants.GET_SHARED_FAILURE:
 			return {
 				...state,
+				loading: false,
 				error: action.error,
 			}
 
@@ -47,14 +60,14 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 		case documentConstants.DELETE_OWN_REQUEST:
 			return {
 				...state,
-				ownDocuments: state.ownDocuments.map(doc =>
+				files: state.files.map(doc =>
 					doc.fileid === action.fileid ? { ...doc, deleting: true } : doc
 				),
 			}
 		case documentConstants.DELETE_OWN_SUCCESS:
 			return {
 				...state,
-				ownDocuments: state.ownDocuments.filter(doc => {
+				files: state.files.filter(doc => {
 					return doc.fileId !== action.fileid
 				}),
 			}
@@ -62,7 +75,7 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 		case documentConstants.DELETE_OWN_FAILURE:
 			return {
 				...state,
-				ownDocuments: state.ownDocuments.map(doc => {
+				files: state.files.map(doc => {
 					if (doc.fileid === action.fileid) {
 						const { deleting, ...docCopy } = doc
 						return { ...docCopy, deleteError: action.error }
@@ -75,7 +88,7 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 		case documentConstants.CHECKOUT_SUCCESS:
 			return {
 				...state,
-				ownDocuments: state.ownDocuments.map(doc => {
+				files: state.files.map(doc => {
 					if (doc.fileId === action.fileid) {
 						return { ...doc, locked: true }
 					} else {
@@ -94,7 +107,7 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 		case documentConstants.UPLOAD_SUCCESS:
 			return {
 				...state,
-				ownDocuments: state.ownDocuments.push(action.doc),
+				files: state.files.concat([action.doc]),
 				uploading: false,
 			}
 
@@ -111,7 +124,7 @@ function documents(state = { ownDocuments: [], sharedDocuments: [] }, action) {
 }
 
 function singleDocument(
-	state = { loadingDocument: false, document: null },
+	state = { loadingDocument: false, document: { title: '' } },
 	action
 ) {
 	switch (action.type) {
@@ -139,7 +152,7 @@ function singleDocument(
 			return {
 				...state,
 				loadingDocument: false,
-				document: null,
+				document: { document: { title: '' } },
 			}
 
 		case documentConstants.ADD_COMMENT_SUCCESS:

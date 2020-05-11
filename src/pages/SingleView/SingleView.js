@@ -8,6 +8,8 @@ import { SVToolbar } from './Toolbar'
 
 import { documentActions } from '../../redux/_actions/document.actions'
 import { Activity } from './Activity'
+import { FileInfo } from './FileInfo'
+import { PreviewHandler } from './FilePreviewHandler'
 
 export default class SingleView extends Component {
 	constructor(props) {
@@ -25,6 +27,10 @@ export default class SingleView extends Component {
 		this.props.dispatch(documentActions.getSingle(this.props.match.params.fileid))
 	}
 
+	componentWillUnmount() {
+		this.props.dispatch(documentActions.clearSingle())
+	}
+
 	deleteFile() {
 		this.props.dispatch(documentActions.delete(this.props.match.params.fileid))
 		this.props.history.push('/')
@@ -35,34 +41,71 @@ export default class SingleView extends Component {
 	}
 
 	render() {
-		const { loadedDoc, loadingDocument } = this.props
+		const {
+			currentFile: {
+				document: { title },
+			},
+			loadingDocument,
+		} = this.props
 
 		return (
 			<Stack tokens={{ childrenGap: 15 }} styles={{ root: { width: '100%' } }}>
 				<StackItem>
 					<Shimmer isDataLoaded={!loadingDocument}>
-						{loadedDoc.document && (
-							<span className="ms-fontSize-42 ms-fontWeight-semibold">
-								{loadedDoc.document.title}
-							</span>
+						{title && (
+							<span className="ms-fontSize-42 ms-fontWeight-semibold">{title}</span>
 						)}
 					</Shimmer>
 				</StackItem>
 				<StackItem>
 					<SVToolbar />
 				</StackItem>
-				<Stack horizontal styles={{ root: { width: '100%' } }}>
+				{/* Full Page Content */}
+				<Stack
+					horizontal
+					styles={{ root: { width: '100%' } }}
+					tokens={{ childrenGap: 20 }}
+				>
+					{/* Left Side Content */}
+					<StackItem styles={{ root: { width: '60%' } }}>
+						<PreviewHandler />
+					</StackItem>
+					{/* Right Side Information */}
 					<StackItem styles={{ root: { width: '30%' } }}>
-						<Stack
-							tokens={{ childrenGap: 15 }}
-							className="ms-depth-4"
-							styles={{ root: { padding: 10 } }}
-						>
+						<Stack tokens={{ childrenGap: 20 }}>
+							{/* Stack for File Information Header and Content */}
 							<StackItem>
-								<span className="ms-fontSize-20 ms-fontWeight-semibold">Activity</span>
+								<Stack
+									tokens={{ childrenGap: 15 }}
+									className="ms-depth-4"
+									styles={{ root: { padding: 10 } }}
+								>
+									<StackItem>
+										<span className="ms-fontSize-20 ms-fontWeight-semibold">
+											File Info
+										</span>
+									</StackItem>
+									<StackItem>
+										<FileInfo />
+									</StackItem>
+								</Stack>
 							</StackItem>
+							{/* Stack for Activity Header and Content */}
 							<StackItem>
-								<Activity />
+								<Stack
+									tokens={{ childrenGap: 15 }}
+									className="ms-depth-4"
+									styles={{ root: { padding: 10 } }}
+								>
+									<StackItem>
+										<span className="ms-fontSize-20 ms-fontWeight-semibold">
+											Activity
+										</span>
+									</StackItem>
+									<StackItem>
+										<Activity />
+									</StackItem>
+								</Stack>
 							</StackItem>
 						</Stack>
 					</StackItem>
@@ -73,8 +116,8 @@ export default class SingleView extends Component {
 }
 
 function mapState(state) {
-	const { loadedDoc } = state
-	return { loadedDoc }
+	const { currentFile } = state
+	return { currentFile }
 }
 
 const connectedSingleView = connect(mapState)(SingleView)

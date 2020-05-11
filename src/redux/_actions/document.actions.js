@@ -1,6 +1,7 @@
 import { documentConstants } from '../_constants/documents.constants'
 import { documentService } from '../_services/documents.service'
 import { alertActions } from './alert.actions'
+import { alertConstants } from '../_constants/alert.constants'
 
 export const documentActions = {
 	getOwn,
@@ -12,6 +13,9 @@ export const documentActions = {
 	checkout,
 	uploadDocument,
 	addComment,
+	archive,
+	queueOCR,
+	queueKey,
 }
 
 function getOwn() {
@@ -233,5 +237,57 @@ function addComment(fileId, comment) {
 	}
 	function failure(error) {
 		return { type: documentConstants.ADD_COMMENT_ERROR, error }
+	}
+}
+
+function archive(fileId) {
+	return dispatch => {
+		dispatch(request())
+
+		documentService.archive(fileId).then(
+			file => {
+				dispatch(success(file))
+			},
+			error => {
+				dispatch(failure(error.toString()))
+				dispatch(alertActions.error(error.toString()))
+			}
+		)
+	}
+
+	function request() {
+		return { type: documentConstants.MOVE_ARCHIVE_REQUEST }
+	}
+	function success(file) {
+		return { type: documentConstants.MOVE_ARCHIVE_SUCCESS, file }
+	}
+	function failure(error) {
+		return { type: documentConstants.MOVE_ARCHIVE_ERROR, error }
+	}
+}
+
+function queueOCR(fileId) {
+	return dispatch => {
+		documentService.queueOCR(fileId).then(
+			data => {
+				dispatch(alertActions.success('Added job to queue'))
+			},
+			error => {
+				dispatch(alertActions.error(error.toString()))
+			}
+		)
+	}
+}
+
+function queueKey(fileId) {
+	return dispatch => {
+		documentService.queueKey(fileId).then(
+			data => {
+				dispatch(alertActions.success('Added job to queue'))
+			},
+			error => {
+				dispatch(alertActions.error(error.toString()))
+			}
+		)
 	}
 }

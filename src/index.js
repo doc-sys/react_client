@@ -10,6 +10,7 @@ import { history } from './redux/_helpers/history'
 import { alertActions } from './redux/_actions/alert.actions'
 
 import { Home } from './pages/Home/Home'
+import { Files } from './pages/Files/Files'
 import { Upload } from './pages/Upload/Upload'
 import { Login } from './pages/Login/Login'
 import SignUp from './pages/Signup'
@@ -22,7 +23,14 @@ import { Messages } from './pages/Messages/Messages'
 import { Sidebar } from './components/Sidebar'
 import { PrivateRoute } from './components/PrivateRoute'
 
-import { MessageBar, MessageBarType, Stack, StackItem } from '@fluentui/react'
+import {
+	MessageBar,
+	MessageBarType,
+	Stack,
+	StackItem,
+	Layer,
+	FontIcon,
+} from '@fluentui/react'
 import { initializeIcons } from '@uifabric/icons'
 
 initializeIcons()
@@ -41,6 +49,34 @@ const ErrorMessage = p => (
 	</MessageBar>
 )
 
+const NotificationMessage = p => (
+	<Layer style={{}}>
+		<div
+			style={{
+				padding: 20,
+				backgroundColor: '#71afe5',
+				color: 'white',
+				position: 'fixed',
+				bottom: 0,
+				marginLeft: '70%',
+				marginRight: 'auto',
+			}}
+			className="ms-depth-8 ms-motion-slideUpIn"
+		>
+			<Stack horizontal tokens={{ childrenGap: 10 }}>
+				<StackItem>{p.message}</StackItem>
+				<StackItem>
+					<FontIcon
+						iconName="ChromeClose"
+						style={{ cursor: 'pointer' }}
+						onClick={() => p.onClose()}
+					/>
+				</StackItem>
+			</Stack>
+		</div>
+	</Layer>
+)
+
 class Index extends Component {
 	constructor(props) {
 		super(props)
@@ -48,6 +84,8 @@ class Index extends Component {
 		history.listen((location, action) => {
 			this.props.clearAlerts()
 		})
+
+		this.notificationAlertTimer = null
 	}
 
 	componentDidUpdate() {
@@ -69,6 +107,13 @@ class Index extends Component {
 		}
 	}
 
+	closeNotification() {
+		this.props.clearNotifications()
+		if (this.notificationAlertTimer != null) {
+			clearTimeout(this.notificationAlertTimer)
+		}
+	}
+
 	render() {
 		const { alert } = this.props
 		const {
@@ -82,9 +127,22 @@ class Index extends Component {
 			],
 		}
 
+		if (alert.notification && alert.notification.message) {
+			this.notificationAlertTimer = setTimeout(
+				() => this.closeNotification(),
+				10000
+			)
+		}
+
 		return (
 			<Router history={history}>
 				<div style={{ width: '70%', margin: 'auto' }}>
+					{alert.notification.message && (
+						<NotificationMessage
+							message={alert.notification.message}
+							onClose={() => this.closeNotification()}
+						/>
+					)}
 					<Stack styles={{ root: { width: '100%' } }}>
 						<StackItem>
 							{alert.message && (
@@ -120,6 +178,7 @@ class Index extends Component {
 											<Route exact path="/login" component={Login} />
 											<Route exact path="/signup" component={SignUp} />
 											<PrivateRoute exact path="/" component={Home} />
+											<PrivateRoute exact path="/files" component={Files} />
 											<PrivateRoute exact path="/upload" component={Upload} />
 											<PrivateRoute exact path="/settings" component={Settings} />
 											<PrivateRoute exact path="/users" component={Users} />
@@ -146,6 +205,7 @@ function mapState(state) {
 
 const actionCreator = {
 	clearAlerts: alertActions.clear,
+	clearNotifications: alertActions.clearNotifications,
 }
 
 const ConnectedIndex = connect(mapState, actionCreator)(Index)
