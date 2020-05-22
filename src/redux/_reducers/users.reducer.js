@@ -5,7 +5,7 @@ export function users(state = [], action) {
 		case userConstants.GET_ALL_REQUEST:
 			return [...state]
 		case userConstants.GET_ALL_SUCCESS:
-			return [...action.users]
+			return [...action.user.user]
 		case userConstants.GET_ALL_FAILURE:
 			return []
 

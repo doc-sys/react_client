@@ -7,6 +7,7 @@ import {
 	DefaultButton,
 	DialogType,
 } from '@fluentui/react'
+import { PeopleAutosuggest } from '../Files/Picker'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -18,6 +19,8 @@ export function SVToolbar(props) {
 	const [showShareModal, toogleShareModal] = React.useState(false)
 	const [showDeleteModal, setDeleteModal] = React.useState(false)
 	const [showArchiveModal, setArchiveModal] = React.useState(false)
+
+	const [selectedToShare, setSelectedToShare] = React.useState([])
 
 	const loading = useSelector(state => state.currentFile.loadingDocument)
 	const file = useSelector(state => state.currentFile.document)
@@ -97,9 +100,17 @@ export function SVToolbar(props) {
 					styles: { main: { maxWidth: 450 } },
 				}}
 			>
-				<p>TEXT</p>
+				<PeopleAutosuggest onChangeHandler={setSelectedToShare} />
 				<DialogFooter>
-					<PrimaryButton onClick={null}>Share</PrimaryButton>
+					<PrimaryButton
+						onClick={() => {
+							selectedToShare.forEach(user => {
+								dispatch(documentActions.share(file.fileId, user._id))
+							})
+						}}
+					>
+						Share
+					</PrimaryButton>
 					<DefaultButton onClick={() => toogleShareModal(false)}>
 						Cancel
 					</DefaultButton>

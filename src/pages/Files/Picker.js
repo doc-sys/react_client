@@ -14,28 +14,39 @@ export function PeopleAutosuggest(props) {
 		showRemoveButton: true,
 	}
 
-	const ResolveSuggestions = (filterText, currentPersonas, limitResults) => {
+	const onFilterChanged = (filterText, currentPersonas, limitResults) => {
 		if (filterText) {
-			let filteredPersons = filterPersons(filterText)
-			console.log(filteredPersons)
-			filteredPersons = filteredPersons.filter(
-				persona => !listContainsPersona(filteredPersons, currentPersonas)
-			)
-			console.log(filteredPersons)
-			filteredPersons = limitResults
-				? filteredPersons.slice(0, limitResults)
-				: filteredPersons
+			let filteredPersonas = filterPersonasByText(filterText)
+			filteredPersonas = removeDuplicates(filteredPersonas, currentPersonas)
+			filteredPersonas = limitResults
+				? filteredPersonas.slice(0, limitResults)
+				: filteredPersonas
 
-			return filteredPersons
+			return filteredPersonas
 		} else {
 			return []
 		}
 	}
-	const listContainsPersona = (person, persons) => {
-		if (!persons || !persons.length || persons.length === 0) {
+
+	const filterPersonasByText = filterText => {
+		return peopleList.filter(item =>
+			doesTextStartWith(item.settings.displayName, filterText)
+		)
+	}
+
+	const doesTextStartWith = (text, filterText) => {
+		return text.toLowerCase().indexOf(filterText.toLowerCase()) === 0
+	}
+
+	const listContainsPersona = (persona, personas) => {
+		if (!personas || !personas.length || personas.length === 0) {
 			return false
 		}
-		return persons.filter(item => item.text === person.text).length > 0
+		return (
+			personas.filter(
+				item => item.settings.displayName === persona.settings.displayName
+			).length > 0
+		)
 	}
 
 	const removeDuplicates = (personas, possibleDupes) => {
@@ -44,28 +55,26 @@ export function PeopleAutosuggest(props) {
 		)
 	}
 
-	const filterPersons = filterText =>
-		peopleList.filter(
-			i =>
-				i.settings.displayName.toLowerCase().indexOf(filterText.toLowerCase()) === 0
-		)
+	const onRemoveSuggestion = () => {}
 
-	const requestOptions = {
-		method: 'GET',
-		headers: authHeader({ 'Content-Type': 'application/json' }),
-	}
-	fetch(
-		`http://${process.env.API_BASE || 'localhost:3001'}/user/`,
-		requestOptions
-	)
-		.then(response => response.json())
-		.then(data => {
-			setPeopleList(data.user)
-		})
+	React.useEffect(() => {
+		const requestOptions = {
+			method: 'GET',
+			headers: authHeader({ 'Content-Type': 'application/json' }),
+		}
+		fetch(
+			`http://${process.env.API_BASE || 'localhost:3001'}/user/`,
+			requestOptions
+		)
+			.then(response => response.json())
+			.then(data => {
+				setPeopleList(data.user)
+			})
+	}, [])
 
 	return (
 		<NormalPeoplePicker
-			onResolveSuggestions={ResolveSuggestions}
+			onResolveSuggestions={onFilterChanged}
 			pickerSuggestionsProps={suggestionProps}
 			onEmptyInputFocus={currentPersonas =>
 				peopleList
@@ -79,7 +88,7 @@ export function PeopleAutosuggest(props) {
 					size={PersonaSize.size24}
 					imageUrl={`data:image/png;base64,${i.avatar}`}
 					text={i.settings.displayName}
-					styles={{ inner: { padding: 5 } }}
+					styles={{ inner: { padding: 5 }, root: { padding: 5, margin: 5 } }}
 				/>
 			)}
 			onRenderItem={i => (
@@ -87,7 +96,7 @@ export function PeopleAutosuggest(props) {
 					size={PersonaSize.size24}
 					imageUrl={`data:image/png;base64,${i.item.avatar}`}
 					text={i.item.settings.displayName}
-					styles={{ inner: { padding: 5 } }}
+					styles={{ inner: { padding: 5 }, root: { margin: 5 } }}
 					key={i.key}
 				/>
 			)}

@@ -53,7 +53,7 @@ function register(user) {
 		body: JSON.stringify(user),
 	}
 
-	return fetch(`https://${API_BASE}/user/signup`, requestOptions).then(
+	return fetch(`http://${API_BASE}/user/signup`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -66,7 +66,7 @@ function unlock(username) {
 	}
 
 	return fetch(
-		`https://${API_BASE}/user/unlock/${username}`,
+		`http://${API_BASE}/user/unlock/${username}`,
 		requestOptions
 	).then(handleResponse)
 }
@@ -77,7 +77,7 @@ function list() {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`https://${API_BASE}/user/`, requestOptions).then(handleResponse)
+	return fetch(`http://${API_BASE}/user/`, requestOptions).then(handleResponse)
 }
 
 function _delete(username) {
@@ -86,7 +86,7 @@ function _delete(username) {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`https://${API_BASE}/user/${username}`, requestOptions).then(
+	return fetch(`http://${API_BASE}/user/${username}`, requestOptions).then(
 		handleResponse
 	)
 }
