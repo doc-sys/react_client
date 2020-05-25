@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { messageActions } from '../../redux/_actions/message.actions'
 import { authHeader } from '../../redux/_helpers/authHeader'
+import {API_BASE} from '../../config'
 
 import {
 	Stack,
@@ -172,7 +173,7 @@ function PeopleAutosuggest(props) {
 			headers: authHeader({ 'Content-Type': 'application/json' }),
 		}
 		fetch(
-			`http://${process.env.API_BASE || 'localhost:3001'}/user/`,
+			`http://${API_BASE}/user/`,
 			requestOptions
 		)
 			.then(response => response.json())

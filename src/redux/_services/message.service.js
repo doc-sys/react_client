@@ -1,19 +1,10 @@
 import { authHeader } from '../_helpers/authHeader'
+import {API_BASE} from '../../config'
 
 export const messageService = {
 	getConvos,
 	initiateConvo,
 	getHistory,
-}
-
-var API_BASE
-
-if (process.env.NODE_ENV === 'development') {
-	API_BASE = 'localhost:3001'
-}
-
-if (process.env.NODE_ENV === 'production') {
-	API_BASE = 'core:3001'
 }
 
 function getConvos() {

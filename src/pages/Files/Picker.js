@@ -2,6 +2,7 @@ import * as React from 'react'
 import { NormalPeoplePicker, Persona, PersonaSize } from '@fluentui/react'
 
 import { authHeader } from '../../redux/_helpers/authHeader'
+import { API_BASE } from '../../config'
 
 export function PeopleAutosuggest(props) {
 	const [peopleList, setPeopleList] = React.useState([])
@@ -63,7 +64,7 @@ export function PeopleAutosuggest(props) {
 			headers: authHeader({ 'Content-Type': 'application/json' }),
 		}
 		fetch(
-			`http://${process.env.API_BASE || 'localhost:3001'}/user/`,
+			`http://${API_BASE}/user/`,
 			requestOptions
 		)
 			.then(response => response.json())

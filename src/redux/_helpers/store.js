@@ -7,6 +7,8 @@ import rootReducer from '../_reducers/rootReducer'
 import { messageConstants } from '../_constants/message.constants'
 import { alertConstants } from '../_constants/alert.constants'
 
+import {API_BASE} from '../../config'
+
 import * as io from 'socket.io-client'
 import UIfx from 'uifx'
 
@@ -19,10 +21,10 @@ const createSocketMiddleware = ({ getState, dispatch }) => {
 	let token = localStorage.getItem('token')
 
 	let socket = io.connect(
-		`http://localhost:3001?token=${token}&username=flexwie`
+		`http://${API_BASE}?token=${token}&username=flexwie`
 	)
 	let notification_recp = io(
-		`http://localhost:3001/notifications?token=${token}&username=flexwie`
+		`http://${API_BASE}/notifications?token=${token}&username=flexwie`
 	)
 
 	socket.on('message', message => {
