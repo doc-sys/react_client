@@ -1,6 +1,5 @@
 import { authHeader } from '../_helpers/authHeader'
 import * as axios from 'axios'
-import {API_BASE} from '../../config'
 
 export const settingsService = {
 	uploadAvatar,
@@ -12,7 +11,7 @@ function uploadAvatar(file, username) {
 
 	return axios({
 		method: 'post',
-		url: `http://${API_BASE}/user/${username}`,
+		url: `/api/user/${username}`,
 		headers: authHeader({ 'Content-Type': 'multipart/form-data' }),
 		data: data,
 	})

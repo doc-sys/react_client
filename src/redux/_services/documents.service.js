@@ -1,6 +1,5 @@
 import { authHeader } from '../_helpers/authHeader'
 import * as axios from 'axios'
-import {API_BASE} from '../../config'
 
 export const documentService = {
 	getOwn,
@@ -22,7 +21,7 @@ function getOwn() {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/document/own`, requestOptions).then(
+	return fetch(`/api/document/own`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -33,7 +32,7 @@ function getShared() {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/document/shared`, requestOptions).then(
+	return fetch(`/api/document/shared`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -44,7 +43,7 @@ function getSingle(fileid) {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/document/${fileid}`, requestOptions).then(
+	return fetch(`/api/document/${fileid}`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -55,7 +54,7 @@ function _delete(fileid) {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/document/${fileid}`, requestOptions).then(
+	return fetch(`/api/document/${fileid}`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -68,7 +67,7 @@ function share(fileid, whom) {
 	}
 
 	return fetch(
-		`http://${API_BASE}/document/share/${fileid}`,
+		`/api/document/share/${fileid}`,
 		requestOptions
 	).then(handleResponse)
 }
@@ -81,7 +80,7 @@ function addComment(fileid, comment) {
 	}
 
 	return fetch(
-		`http://${API_BASE}/document/comment/${fileid}`,
+		`/api/document/comment/${fileid}`,
 		requestOptions
 	).then(handleResponse)
 }
@@ -93,7 +92,7 @@ function checkout(fileId) {
 	}
 
 	return fetch(
-		`http://${API_BASE}/document/checkout/${fileId}`,
+		`/api/document/checkout/${fileId}`,
 		requestOptions
 	).then(handleDownloadResponse)
 }
@@ -101,7 +100,7 @@ function checkout(fileId) {
 function upload(formData) {
 	return axios({
 		method: 'post',
-		url: `http://${API_BASE}/document/`,
+		url: `/api/document/`,
 		headers: authHeader({ 'Content-Type': 'multipart/form-data' }),
 		data: formData,
 	}).then(handleAxiosResponse)
@@ -114,7 +113,7 @@ function archive(fileId) {
 	}
 
 	return fetch(
-		`http://${API_BASE}/document/archive/${fileId}`,
+		`/api/document/archive/${fileId}`,
 		requestOptions
 	).then(handleResponse)
 }
@@ -126,7 +125,7 @@ function queueOCR(fileId) {
 	}
 
 	return fetch(
-		`http://${API_BASE}/document/queue/ocr/${fileId}`,
+		`/api/document/queue/ocr/${fileId}`,
 		requestOptions
 	).then(handleResponse)
 }
@@ -138,7 +137,7 @@ function queueKey(fileId) {
 	}
 
 	return fetch(
-		`http://${API_BASE}/document/queue/key/${fileId}`,
+		`/api/document/queue/key/${fileId}`,
 		requestOptions
 	).then(handleResponse)
 }

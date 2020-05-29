@@ -1,5 +1,4 @@
 import { authHeader } from '../_helpers/authHeader'
-import {API_BASE} from '../../config'
 
 export const messageService = {
 	getConvos,
@@ -13,7 +12,7 @@ function getConvos() {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/message/`, requestOptions).then(
+	return fetch(`/api/message/`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -25,7 +24,7 @@ function initiateConvo(userid, message) {
 		body: JSON.stringify({ participants: [userid], message: message }),
 	}
 
-	return fetch(`http://${API_BASE}/message/`, requestOptions).then(
+	return fetch(`/api/message/`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -36,7 +35,7 @@ function getHistory(convoId) {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/message/${convoId}`, requestOptions).then(
+	return fetch(`/api/message/${convoId}`, requestOptions).then(
 		handleResponse
 	)
 }

@@ -8,7 +8,6 @@ import {
 } from '@fluentui/react'
 
 import { authHeader } from '../../redux/_helpers/authHeader'
-import {API_BASE} from '../../config'
 
 import { useSelector } from 'react-redux'
 
@@ -42,7 +41,7 @@ function PDFHandler(props) {
 			<StackItem>
 				<Document
 					file={{
-						url: `http://${API_BASE}/document/checkout/${fileItem.fileId}`,
+						url: `/api/document/checkout/${fileItem.fileId}`,
 						httpHeaders: authHeader(),
 					}}
 					onLoadSuccess={onLoadSuccess}
@@ -88,7 +87,7 @@ function ImageHandler(props) {
 
 	return (
 		<img
-			src={`http://${API_BASE}/document/checkout/${fileItem.fileId}?token=${token}`}
+			src={`/api/document/checkout/${fileItem.fileId}?token=${token}`}
 			alt="Meaningful text"
 			style={{ width: '100%' }}
 		/>
