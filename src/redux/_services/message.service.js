@@ -6,23 +6,13 @@ export const messageService = {
 	getHistory,
 }
 
-var API_BASE
-
-if (process.env.NODE_ENV === 'development') {
-	API_BASE = 'localhost:3001'
-}
-
-if (process.env.NODE_ENV === 'production') {
-	API_BASE = 'core:3001'
-}
-
 function getConvos() {
 	const requestOptions = {
 		method: 'GET',
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/message/`, requestOptions).then(
+	return fetch(`/api/message/`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -34,7 +24,7 @@ function initiateConvo(userid, message) {
 		body: JSON.stringify({ participants: [userid], message: message }),
 	}
 
-	return fetch(`http://${API_BASE}/message/`, requestOptions).then(
+	return fetch(`/api/message/`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -45,7 +35,7 @@ function getHistory(convoId) {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/message/${convoId}`, requestOptions).then(
+	return fetch(`/api/message/${convoId}`, requestOptions).then(
 		handleResponse
 	)
 }

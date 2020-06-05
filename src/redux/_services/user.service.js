@@ -10,16 +10,6 @@ export const userService = {
 	unlock,
 }
 
-var API_BASE
-
-if (process.env.NODE_ENV === 'development') {
-	API_BASE = 'localhost:3001'
-}
-
-if (process.env.NODE_ENV === 'production') {
-	API_BASE = 'core:3001'
-}
-
 function login(username, password) {
 	const requestOptions = {
 		method: 'POST',
@@ -27,7 +17,7 @@ function login(username, password) {
 		body: JSON.stringify({ username, password }),
 	}
 
-	return fetch(`http://${API_BASE}/user/login`, requestOptions)
+	return fetch(`/api/user/login`, requestOptions)
 		.then(handleResponse)
 		.then(data => {
 			localStorage.setItem('user', JSON.stringify(data.user))
@@ -53,7 +43,7 @@ function register(user) {
 		body: JSON.stringify(user),
 	}
 
-	return fetch(`http://${API_BASE}/user/signup`, requestOptions).then(
+	return fetch(`/api/user/signup`, requestOptions).then(
 		handleResponse
 	)
 }
@@ -66,7 +56,7 @@ function unlock(username) {
 	}
 
 	return fetch(
-		`http://${API_BASE}/user/unlock/${username}`,
+		`/api/user/unlock/${username}`,
 		requestOptions
 	).then(handleResponse)
 }
@@ -77,7 +67,7 @@ function list() {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/user/`, requestOptions).then(handleResponse)
+	return fetch(`/api/user/`, requestOptions).then(handleResponse)
 }
 
 function _delete(username) {
@@ -86,7 +76,7 @@ function _delete(username) {
 		headers: authHeader({ 'Content-Type': 'application/json' }),
 	}
 
-	return fetch(`http://${API_BASE}/user/${username}`, requestOptions).then(
+	return fetch(`/api/user/${username}`, requestOptions).then(
 		handleResponse
 	)
 }

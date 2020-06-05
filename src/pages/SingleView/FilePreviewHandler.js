@@ -41,7 +41,7 @@ function PDFHandler(props) {
 			<StackItem>
 				<Document
 					file={{
-						url: `http://localhost:3001/document/checkout/${fileItem.fileId}`,
+						url: `/api/document/checkout/${fileItem.fileId}`,
 						httpHeaders: authHeader(),
 					}}
 					onLoadSuccess={onLoadSuccess}
@@ -87,7 +87,7 @@ function ImageHandler(props) {
 
 	return (
 		<img
-			src={`http://localhost:3001/document/checkout/${fileItem.fileId}?token=${token}`}
+			src={`/api/document/checkout/${fileItem.fileId}?token=${token}`}
 			alt="Meaningful text"
 			style={{ width: '100%' }}
 		/>

@@ -5,23 +5,13 @@ export const settingsService = {
 	uploadAvatar,
 }
 
-var API_BASE
-
-if (process.env.NODE_ENV === 'development') {
-	API_BASE = 'localhost:3001'
-}
-
-if (process.env.NODE_ENV === 'production') {
-	API_BASE = 'core:3001'
-}
-
 function uploadAvatar(file, username) {
 	let data = new FormData()
 	data.append('avatar', file)
 
 	return axios({
 		method: 'post',
-		url: `http://${API_BASE}/user/${username}`,
+		url: `/api/user/${username}`,
 		headers: authHeader({ 'Content-Type': 'multipart/form-data' }),
 		data: data,
 	})

@@ -63,7 +63,7 @@ export function PeopleAutosuggest(props) {
 			headers: authHeader({ 'Content-Type': 'application/json' }),
 		}
 		fetch(
-			`http://${process.env.API_BASE || 'localhost:3001'}/user/`,
+			`/api/user/`,
 			requestOptions
 		)
 			.then(response => response.json())

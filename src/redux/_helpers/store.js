@@ -19,10 +19,10 @@ const createSocketMiddleware = ({ getState, dispatch }) => {
 	let token = localStorage.getItem('token')
 
 	let socket = io.connect(
-		`http://localhost:3001?token=${token}&username=flexwie`
+		`/api?token=${token}&username=flexwie`
 	)
 	let notification_recp = io(
-		`http://localhost:3001/notifications?token=${token}&username=flexwie`
+		`/api/notifications?token=${token}&username=flexwie`
 	)
 
 	socket.on('message', message => {
