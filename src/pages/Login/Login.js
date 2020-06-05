@@ -30,12 +30,13 @@ class Login extends Component {
 	handleSubmit() {
 		const { username, password } = this.state
 		const { dispatch } = this.props
+		console.log(this.props)
 		if (username && password) {
 			dispatch(
 				userActions.login(
 					username,
 					password,
-					this.props.location.state.from.pathname
+					this.props.location.state ? this.props.location.state.from.pathname : '/'
 				)
 			)
 		} else {
