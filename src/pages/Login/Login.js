@@ -44,13 +44,6 @@ class Login extends Component {
 		}
 	}
 
-	// componentDidMount() {
-	// 	const { loggedIn } = this.props
-	// 	if (loggedIn) {
-	// 		this.props.history.push('/')
-	// 	}
-	// }
-
 	render() {
 		const { username, password } = this.state
 

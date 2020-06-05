@@ -64,7 +64,9 @@ const NotificationMessage = p => (
 			className="ms-depth-8 ms-motion-slideUpIn"
 		>
 			<Stack horizontal tokens={{ childrenGap: 10 }}>
-				<StackItem>{p.message}</StackItem>
+				<StackItem>
+					<a href={p.link}>{p.message}</a>
+				</StackItem>
 				<StackItem>
 					<FontIcon
 						iconName="ChromeClose"
@@ -127,12 +129,12 @@ class Index extends Component {
 			],
 		}
 
-		if (alert.notification && alert.notification.message) {
-			this.notificationAlertTimer = setTimeout(
-				() => this.closeNotification(),
-				10000
-			)
-		}
+		// if (alert.notification && alert.notification.message) {
+		// 	this.notificationAlertTimer = setTimeout(
+		// 		() => this.closeNotification(),
+		// 		10000
+		// 	)
+		// }
 
 		return (
 			<Router history={history}>
@@ -140,6 +142,7 @@ class Index extends Component {
 					{alert.notification.message && (
 						<NotificationMessage
 							message={alert.notification.message}
+							link={alert.notification.link}
 							onClose={() => this.closeNotification()}
 						/>
 					)}

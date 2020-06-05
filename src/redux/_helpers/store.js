@@ -11,6 +11,7 @@ import * as io from 'socket.io-client'
 import UIfx from 'uifx'
 
 import notify from './notification.mp3'
+import { Action } from 'grommet-icons'
 const notification = new UIfx(notify, { volume: 1 })
 
 const logger = createLogger()
@@ -18,12 +19,10 @@ const logger = createLogger()
 const createSocketMiddleware = ({ getState, dispatch }) => {
 	let token = localStorage.getItem('token')
 
-	let socket = io.connect(
-		`/api?token=${token}&username=flexwie`
-	)
-	let notification_recp = io(
-		`/api/notifications?token=${token}&username=flexwie`
-	)
+	let socket = io.connect(`/api?token=${token}`)
+	let notification_recp = io(`/notifications?token=${token}`)
+
+	console.log(notification_recp)
 
 	socket.on('message', message => {
 		dispatch({
@@ -32,12 +31,25 @@ const createSocketMiddleware = ({ getState, dispatch }) => {
 		})
 	})
 
-	notification_recp.on('notification', message => {
-		notification.play()
-		dispatch({
-			type: alertConstants.NOTIFICATION,
-			message: message,
-		})
+	notification_recp.on('notification', data => {
+		data.payload.playNotification && notification.play()
+		console.log(data)
+
+		switch (data.type) {
+			case 'log':
+				dispatch({
+					type: alertConstants.NOTIFICATION,
+					message: {
+						text: data.payload.notificationTemplate.join(' '),
+						link: data.payload.actionAttentionURL,
+					},
+				})
+				break
+			case 'share':
+				break
+			default:
+				break
+		}
 	})
 
 	return next => action => {

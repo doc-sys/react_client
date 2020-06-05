@@ -17,7 +17,11 @@ export function alert(state = { notification: {} }, action) {
 		case alertConstants.NOTIFICATION:
 			return {
 				...state,
-				notification: { type: 'alert-notification', message: action.message },
+				notification: {
+					type: 'alert-notification',
+					message: action.message.text,
+					link: action.message.link,
+				},
 			}
 		case alertConstants.CLEAR:
 			return {
