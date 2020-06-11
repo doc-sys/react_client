@@ -1,6 +1,7 @@
 import { documentConstants } from '../_constants/documents.constants'
 
 import { uniqBy, orderBy } from 'lodash'
+import { alertConstants } from '../_constants/alert.constants'
 
 export const documentReducers = {
 	documents,
@@ -124,7 +125,7 @@ function documents(state = { files: [] }, action) {
 }
 
 function singleDocument(
-	state = { loadingDocument: false, document: { title: '' } },
+	state = { loadingDocument: false, document: { title: '', log: [] } },
 	action
 ) {
 	switch (action.type) {
@@ -195,6 +196,19 @@ function singleDocument(
 				sharing: false,
 				error: action.error,
 			}
+
+		//GET NEW LOG ON NOTIFICATION
+		case alertConstants.NOTIFICATION:
+			if (action.message.type === 'log') {
+				return {
+					...state,
+					document: {
+						...state.document,
+						log: action.message.data,
+					},
+				}
+			}
+			break
 
 		default:
 			return state

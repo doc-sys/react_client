@@ -42,6 +42,8 @@ const createSocketMiddleware = ({ getState, dispatch }) => {
 					message: {
 						text: data.payload.notificationTemplate.join(' '),
 						link: data.payload.actionAttentionURL,
+						type: data.type,
+						data: data.payload.payload,
 					},
 				})
 				break
